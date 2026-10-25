@@ -1,8 +1,6 @@
 import os
 import fitz  # PyMuPDF
 import glob
-import win32api
-import win32print
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for
 
 app = Flask(__name__)
@@ -144,14 +142,8 @@ def admin_dashboard():
 def print_now(order_index):
     if 0 <= order_index < len(pending_orders):
         order = pending_orders.pop(order_index)
-        filepath = os.path.abspath(os.path.join(app.config['UPLOAD_FOLDER'], order['filename']))
-        
-        try:
-            printer_name = win32print.GetDefaultPrinter()
-            win32api.ShellExecute(0, "print", filepath, f'/d:"{printer_name}"', ".", 0)
-        except Exception as e:
-            print(f"Printer error: {e}")
-            
+        # ক্লাউড সার্ভারে শুধু প্রিন্ট রিকোয়েস্ট জমা রাখবে বা পাস করবে
+        print(f"Print requested for: {order}")
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
