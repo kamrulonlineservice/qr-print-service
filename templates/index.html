@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kamrul Online Service - Upload</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8fafc; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
+        .container { background: #fff; padding: 15px; width: 100%; max-width: 480px; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
+        .main-content { flex: 1; }
+        .shop-header { background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff; padding: 15px; border-radius: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .printer-icon { background: rgba(255,255,255,0.15); padding: 10px; border-radius: 12px; font-size: 24px; }
+        .shop-info h3 { margin: 0; font-size: 15px; font-weight: 700; }
+        .shop-info p { margin: 3px 0 6px 0; font-size: 10px; opacity: 0.85; }
+        .rates { display: flex; gap: 6px; }
+        .rate-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: bold; }
+        .rate-bw { background: rgba(255,255,255,0.2); color: #fff; }
+        .rate-color { background: #db2777; color: #fff; }
+        .steps { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; font-weight: bold; color: #64748b; background: #f1f5f9; padding: 10px; border-radius: 12px; text-align: center; }
+        .steps span.active { color: #db2777; }
+        .whatsapp-box { background: #fdf4ff; border: 2px solid #f0abfc; padding: 12px; border-radius: 14px; margin-bottom: 15px; }
+        .whatsapp-box label { font-size: 11px; font-weight: bold; color: #86198f; display: block; margin-bottom: 5px; }
+        .whatsapp-input { width: 100%; padding: 10px; border: 1px solid #e879f9; border-radius: 8px; font-size: 13px; outline: none; background: #fff; }
+        .upload-card { background: #faf5ff; border: 2px dashed #c084fc; padding: 15px; border-radius: 16px; text-align: center; margin-bottom: 15px; }
+        .upload-title { font-size: 15px; font-weight: 800; color: #6b21a8; margin-bottom: 4px; }
+        .upload-subtitle { font-size: 10px; color: #6b7280; margin-bottom: 10px; }
+        .format-badges { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+        .badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
+        .b-pdf { background: #fee2e2; color: #991b1b; }
+        .b-jpg { background: #dcfce7; color: #166534; }
+        .b-png { background: #e0e7ff; color: #3730a3; }
+        .file-drop-area { border: 2px dashed #a855f7; background: #fff; padding: 15px; border-radius: 12px; cursor: pointer; position: relative; }
+        .file-input { position: absolute; left: 0; top: 0; height: 100%; width: 100%; opacity: 0; cursor: pointer; }
+        .drop-text { font-size: 12px; font-weight: bold; color: #581c87; }
+        .btn-next { background: linear-gradient(135deg, #1e3a8a, #db2777); color: #fff; border: none; padding: 14px; font-size: 15px; font-weight: bold; border-radius: 14px; width: 100%; cursor: pointer; }
+        .admin-link { display: block; text-align: center; margin-top: 15px; font-size: 11px; color: #3b82f6; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="main-content">
+        <div class="shop-header">
+            <div class="printer-icon">🖨️</div>
+            <div class="shop-info">
+                <h3>Kamrul Online Service</h3>
+                <p>Gaon Pradhan Office, Goroimari, Morigaon, Assam - 782104</p>
+                <div class="rates">
+                    <span class="rate-tag rate-bw">B&W: ₹5/page</span>
+                    <span class="rate-tag rate-color">Color: ₹10/page</span>
+                </div>
+            </div>
+        </div>
+        <div class="steps">
+            <span class="active">1. Upload ✓</span>
+            <span>2. Edit</span>
+            <span>3. Preview</span>
+            <span>4. Pay</span>
+        </div>
+        <form action="/edit" method="POST" enctype="multipart/form-data">
+            <div class="whatsapp-box">
+                <label>💬 Enter Your WhatsApp Mobile Number:</label>
+                <input type="tel" name="customer_phone" class="whatsapp-input" placeholder="e.g. 9876543210" required>
+            </div>
+            <div class="upload-card">
+                <div class="upload-title">Upload Document</div>
+                <div class="upload-subtitle">PDF, JPG, PNG — all supported</div>
+                <div class="format-badges">
+                    <span class="badge b-pdf">PDF</span>
+                    <span class="badge b-jpg">JPG</span>
+                    <span class="badge b-png">PNG</span>
+                </div>
+                <div class="file-drop-area">
+                    <div style="font-size: 18px; margin-bottom: 4px;">📤</div>
+                    <div class="drop-text">Tap here or drag & drop your file</div>
+                    <input type="file" name="file" class="file-input" required>
+                </div>
+            </div>
+            <button type="submit" class="btn-next">Next ➔</button>
+        </form>
+        <a href="/admin" class="admin-link" target="_blank">💻 Open Shop Owner Dashboard (Counter Orders)</a>
+    </div>
+</div>
+</body>
+</html>
