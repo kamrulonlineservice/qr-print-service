@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamrul Online Service - Payment</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8fafc; margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .container { background: #fff; padding: 15px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 100%; max-width: 450px; border: 2px solid #3b82f6; margin-top: 5px; }
+        
+        .header-box { background: linear-gradient(135deg, #1e3a8a, #3b82f6); color: white; padding: 12px; border-radius: 12px; text-align: center; margin-bottom: 10px; }
+        .header-box h2 { margin: 0; font-size: 16px; }
+        .header-box p { margin: 3px 0 0; font-size: 11px; opacity: 0.9; }
+
+        .steps { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; font-weight: bold; color: #64748b; background: #f1f5f9; padding: 8px; border-radius: 10px; text-align: center; }
+        .steps span.active { color: #16a34a; }
+
+        .section-title { font-size: 13px; font-weight: bold; color: #1e3a8a; margin-bottom: 8px; }
+        
+        .bill-card { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .bill-info h4 { margin: 0 0 4px; font-size: 13px; color: #1e3a8a; }
+        .bill-info p { margin: 0; font-size: 11px; color: #64748b; font-weight: bold; }
+        .bill-amount { font-size: 20px; font-weight: bold; color: #16a34a; }
+
+        .payment-methods { display: flex; gap: 8px; margin-bottom: 12px; }
+        .method-card { flex: 1; border: 2px solid #cbd5e1; border-radius: 10px; padding: 10px; text-align: center; cursor: pointer; background: #fff; }
+        .method-card.selected { border-color: #3b82f6; background: #eff6ff; }
+        .method-card input { display: none; }
+        .method-card h4 { margin: 0 0 3px; font-size: 12px; color: #1e3a8a; }
+        .method-card p { margin: 0; font-size: 10px; color: #64748b; }
+
+        /* Online Payment Section */
+        #onlinePaymentBox { display: none; background: #f8fafc; border: 1.5px dashed #3b82f6; border-radius: 12px; padding: 12px; text-align: center; margin-bottom: 12px; }
+        .upi-qr { width: 140px; height: 140px; margin: 8px auto; border-radius: 8px; border: 1px solid #cbd5e1; padding: 4px; background: #fff; }
+        .upi-id-text { font-size: 12px; font-weight: bold; color: #1e3a8a; margin: 6px 0; }
+        .pay-app-buttons { display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
+        .app-btn { background: #1e3a8a; color: #fff; text-decoration: none; padding: 6px 12px; font-size: 11px; font-weight: bold; border-radius: 6px; display: inline-block; }
+
+        .btn-group { display: flex; gap: 8px; }
+        .btn-back { background: #e2e8f0; color: #334155; border: none; padding: 12px; font-size: 13px; font-weight: bold; border-radius: 10px; width: 35%; cursor: pointer; text-align: center; text-decoration: none; }
+        .btn-confirm { background: #16a34a; color: #fff; border: none; padding: 12px; font-size: 13px; font-weight: bold; border-radius: 10px; width: 65%; cursor: pointer; text-align: center; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-box">
+        <h2>Kamrul Online Service</h2>
+        <p>Goroimari, Morigaon, Assam</p>
+    </div>
+    
+    <div class="steps">
+        <span>1. Upload ✓</span>
+        <span>2. Edit ✓</span>
+        <span>3. Preview ✓</span>
+        <span class="active">4. Pay ✓</span>
+    </div>
+
+    <div class="section-title">💳 Make Payment</div>
+
+    <div class="bill-card">
+        <div class="bill-info">
+            <h4>Type: {{ print_type | upper }}</h4>
+            <p>{{ total_pages }} Pages x {{ copies }} Copy (₹{{ rate }}/page)</p>
+        </div>
+        <div class="bill-amount">₹ {{ amount }}</div>
+    </div>
+
+    <form action="/pay-counter" method="POST" id="paymentForm">
+        <input type="hidden" name="filename" value="{{ filename }}">
+        <input type="hidden" name="customer_phone" value="{{ customer_phone }}">
+        <input type="hidden" name="print_type" value="{{ print_type }}">
+        <input type="hidden" name="copies" value="{{ copies }}">
+        <input type="hidden" name="total_pages" value="{{ total_pages }}">
+
+        <div class="payment-methods">
+            <label class="method-card selected" id="counterCard" onclick="selectMethod('counter')">
+                <input type="radio" name="pay_mode" value="counter" checked>
+                <h4>Pay at Counter</h4>
+                <p>Cash at shop</p>
+            </label>
+            <label class="method-card" id="onlineCard" onclick="selectMethod('online')">
+                <input type="radio" name="pay_mode" value="online">
+                <h4>Pay Online</h4>
+                <p>UPI / QR Code</p>
+            </label>
+        </div>
+
+        <!-- Online Payment Hidden Box with QR & Apps -->
+        <div id="onlinePaymentBox">
+            <p style="margin: 0; font-size: 11px; font-weight: bold; color: #475569;">Scan QR with PhonePe / Paytm / GPay</p>
+            <!-- Dynamic UPI QR Code generator -->
+            <img class="upi-qr" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa={{ upi_id }}&pn=Kamrul%20Online%20Service&am={{ amount }}&cu=INR" alt="UPI QR">
+            <div class="upi-id-text">UPI ID: {{ upi_id }}</div>
+            <div class="pay-app-buttons">
+                <a href="upi://pay?pa={{ upi_id }}&pn=Kamrul%20Online%20Service&am={{ amount }}&cu=INR" class="app-btn" style="background:#00baf2;">Paytm Pay</a>
+                <a href="upi://pay?pa={{ upi_id }}&pn=Kamrul%20Online%20Service&am={{ amount }}&cu=INR" class="app-btn" style="background:#5f259f;">PhonePe</a>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <a href="javascript:history.back()" class="btn-back">← Back</a>
+            <button type="submit" class="btn-confirm" id="confirmBtn">✅ Confirm Order (Pay at Counter)</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function selectMethod(mode) {
+        const counterCard = document.getElementById('counterCard');
+        const onlineCard = document.getElementById('onlineCard');
+        const onlineBox = document.getElementById('onlinePaymentBox');
+        const confirmBtn = document.getElementById('confirmBtn');
+        
+        if(mode === 'counter') {
+            counterCard.classList.add('selected');
+            onlineCard.classList.remove('selected');
+            counterCard.querySelector('input').checked = true;
+            onlineBox.style.display = 'none';
+            confirmBtn.innerText = "✅ Confirm Order (Pay at Counter)";
+        } else {
+            onlineCard.classList.add('selected');
+            counterCard.classList.remove('selected');
+            onlineCard.querySelector('input').checked = true;
+            onlineBox.style.display = 'block';
+            confirmBtn.innerText = "⚡ Complete Online Payment";
+        }
+    }
+</script>
+</body>
+</html>

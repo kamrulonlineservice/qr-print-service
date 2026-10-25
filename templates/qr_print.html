@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>QR se Print - Kamrul Online Service</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #000;
+        }
+        .poster {
+            width: 720px;
+            background: #ffffff;
+            border: 6px solid #1e3a8a;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+        /* Top Black Printer Icon */
+        .top-printer-icon {
+            position: absolute;
+            top: 30px;
+            right: 35px;
+            font-size: 50px;
+            color: #0f172a;
+        }
+        /* Header section */
+        .header {
+            padding: 15px 0 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 56px;
+            color: #1e3a8a;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .header h1 .small-se {
+            font-size: 38px;
+            font-weight: bold;
+            display: inline-block;
+            transform: rotate(-10deg);
+            margin: 0 8px;
+        }
+        /* Steps Bar */
+        .steps-bar {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 14px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        /* Middle area */
+        .content {
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .step-icon-box {
+            border: 3px solid #1e3a8a;
+            border-radius: 14px;
+            padding: 15px;
+            width: 150px;
+            background: #f8fafc;
+            font-size: 15px;
+            line-height: 1.4;
+            text-align: center;
+            font-weight: bold;
+        }
+        .step-icon-box h4 {
+            margin: 0 0 8px 0;
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: 900;
+        }
+        .step-icon-box .icon {
+            font-size: 32px;
+            color: #0f172a;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .main-qr-box {
+            border: 5px solid #1e3a8a;
+            border-radius: 20px;
+            padding: 20px;
+            background: #ffffff;
+        }
+        .main-qr-box img {
+            width: 250px;
+            height: 250px;
+            display: block;
+        }
+        .arrow-right {
+            color: #1e3a8a;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        /* Upload & Pay Badge */
+        .upload-pay-area {
+            margin: 25px 0;
+        }
+        .upload-pay-badge {
+            border: 3px solid #1e3a8a;
+            border-radius: 40px;
+            padding: 15px 30px;
+            display: inline-flex;
+            align-items: center;
+            background: #f8fafc;
+            color: #1e3a8a;
+            font-weight: 900;
+            font-size: 18px;
+        }
+        .upload-pay-badge .upload-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: #0f172a;
+        }
+        /* AUTOMATIC PRINT Banner */
+        .footer-banner {
+            background: #f59e0b;
+            padding: 16px;
+            color: #000000;
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .footer-banner .print-icon {
+            margin-right: 12px;
+            font-size: 30px;
+            color: #0f172a;
+        }
+        /* Shop Info */
+        .shop-info-area {
+            margin-bottom: 10px;
+        }
+        .developer-info {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+        }
+        .developer-info span {
+            border: 2px solid #1e3a8a;
+            border-radius: 12px;
+            padding: 3px 12px;
+            color: #1e3a8a;
+            font-weight: 800;
+        }
+        .shop-info {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            margin-top: 15px;
+        }
+        .shop-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #93c5fd;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .shop-info h2 {
+            margin: 8px 0 4px 0;
+            font-size: 28px;
+            color: #facc15;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+        .shop-info h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="poster">
+    <!-- Top Black Printer Icon -->
+    <div class="top-printer-icon">&#128424;</div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>QR <span class="small-se">se</span> PRINT</h1>
+    </div>
+
+    <!-- Steps Bar -->
+    <div class="steps-bar">
+        SCAN &bull; UPLOAD &bull; PAY &bull; PRINT
+    </div>
+
+    <!-- Content (Icons & QR) -->
+    <div class="content">
+        <!-- Step 1 icon -->
+        <div class="step-icon-box">
+            <h4>1. SCAN</h4>
+            <span class="icon">&#128242;</span>
+            QR Code<br>স্ক্যান কৰক
+        </div>
+        
+        <div class="arrow-right">&#10132;</div>
+
+        <!-- QR Code -->
+        <div class="main-qr-box">
+            <img src="{{ url_for('static', filename='qr.png') }}" alt="QR Code">
+        </div>
+
+        <div class="arrow-right">&#10132;</div>
+
+        <!-- Step 3 icon -->
+        <div class="step-icon-box">
+            <h4>3. PRINT</h4>
+            <span class="icon">&#128424;</span>
+            Automatic<br>Print হব
+        </div>
+    </div>
+
+    <!-- Upload & Pay Badge -->
+    <div class="upload-pay-area">
+        <div class="upload-pay-badge">
+            <span class="upload-icon">&#128228;</span>
+            2. UPLOAD & PAY (ফাইল আপলোড কৰক Payment কৰক)
+        </div>
+    </div>
+
+    <!-- Automatic Print Banner -->
+    <div class="footer-banner">
+        <span class="print-icon">&#128424;</span> ⚡ AUTOMATIC PRINT ⚡
+    </div>
+
+    <!-- Shop Info -->
+    <div class="shop-info-area">
+        <div class="developer-info">Developed by: <span>Kamrul Online Service</span></div>
+    </div>
+    <div class="shop-info">
+        <p>AVAILABLE ONLY AT</p>
+        <h2>KAMRUL ONLINE SERVICE</h2>
+        <h3>Gaon Pradhan office
+            vill: Garoimari
+            p.o:garoimari
+            dist: Morigaon
+            pin-782104
+
+        </h3>
+    </div>
+</div>
+
+</body>
+</html>
