@@ -1,308 +1,33 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <!-- Register Your Shop Button -->
-<div style="text-align: center; margin: 20px 0;">
-    <a href="/register" style="background: #2563eb; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3); display: inline-block;">+ Register Your Shop</a>
-</div>
     <meta charset="UTF-8">
-    <title>QR se Print - {{ shop.shop_name }}</title>
+    <title>{{ shop.shop_name }} - QR se Print</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #000;
-        }
-        .poster {
-            width: 720px;
-            background: #ffffff;
-            border: 6px solid #1e3a8a;
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-            box-sizing: border-box;
-            overflow: hidden;
-            text-align: center;
-            position: relative;
-            padding: 20px;
-        }
-        .header {
-            padding: 15px 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .left-printer-icon { position: absolute; left: 35px; }
-        .right-printer-icon { position: absolute; right: 35px; }
-        .header h1 {
-            margin: 0;
-            font-size: 56px;
-            color: #1e3a8a;
-            font-weight: 900;
-            letter-spacing: 1px;
-        }
-        .header h1 .small-se {
-            font-size: 38px;
-            font-weight: bold;
-            display: inline-block;
-            transform: rotate(-10deg);
-            margin: 0 8px;
-        }
-        .steps-bar {
-            background: #1e3a8a;
-            color: #ffffff;
-            padding: 14px;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-        .content {
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .step-icon-box {
-            border: 3px solid #1e3a8a;
-            border-radius: 14px;
-            padding: 15px;
-            width: 150px;
-            background: #f8fafc;
-            font-size: 15px;
-            line-height: 1.4;
-            text-align: center;
-            font-weight: bold;
-        }
-        .step-icon-box h4 {
-            margin: 0 0 8px 0;
-            color: #1e3a8a;
-            font-size: 18px;
-            font-weight: 900;
-        }
-        .step-icon-box .icon {
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: center;
-        }
-        .main-qr-box {
-            border: 5px solid #1e3a8a;
-            border-radius: 20px;
-            padding: 20px;
-            background: #ffffff;
-        }
-        .main-qr-box img {
-            width: 250px;
-            height: 250px;
-            display: block;
-        }
-        .arrow-right {
-            color: #1e3a8a;
-            font-size: 40px;
-            font-weight: bold;
-        }
-        .upload-pay-area {
-            margin: 25px 0;
-        }
-        .upload-pay-badge {
-            border: 3px solid #1e3a8a;
-            border-radius: 40px;
-            padding: 15px 30px;
-            display: inline-flex;
-            align-items: center;
-            background: #f8fafc;
-            color: #1e3a8a;
-            font-weight: 900;
-            font-size: 18px;
-        }
-        .upload-pay-badge .upload-icon {
-            font-size: 28px;
-            margin-right: 12px;
-            color: #0f172a;
-        }
-        .footer-banner {
-            background: #f59e0b;
-            padding: 16px;
-            color: #000000;
-            font-weight: 900;
-            font-size: 26px;
-            letter-spacing: 1.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .footer-banner .print-icon {
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-        }
-        .shop-info-area {
-            margin-bottom: 10px;
-        }
-        .developer-info {
-            font-size: 13px;
-            color: #475569;
-            font-weight: 600;
-        }
-        .developer-info span {
-            border: 2px solid #1e3a8a;
-            border-radius: 12px;
-            padding: 3px 12px;
-            color: #1e3a8a;
-            font-weight: 800;
-        }
-        .shop-info {
-            background: #1e3a8a;
-            color: #ffffff;
-            padding: 20px;
-            border-radius: 14px;
-            margin-top: 15px;
-        }
-        .shop-info p {
-            margin: 0;
-            font-size: 14px;
-            color: #93c5fd;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-        .shop-info h2 {
-            margin: 8px 0 4px 0;
-            font-size: 28px;
-            color: #facc15;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-        }
-        .shop-info h3 {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: pre-line;
-        }
+        body { font-family: sans-serif; background: #f3f4f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .poster { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 400px; text-align: center; border: 2px solid #1e293b; }
+        h1 { font-size: 24px; color: #1e293b; margin-bottom: 5px; }
+        .qr-box img { width: 200px; height: 200px; border: 2px solid #cbd5e1; border-radius: 8px; margin: 15px 0; }
+        .footer-box { background: #1e293b; color: white; padding: 10px; border-radius: 6px; margin-top: 15px; font-size: 14px; }
+        .btn-reg { background: #2563eb; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="poster">
-    <div class="header">
-        <div class="left-printer-icon">
-            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-        </div>
-        
-        <h1>QR <span class="small-se">se</span> PRINT</h1>
+    <!-- Register Button -->
+    <a href="/register" class="btn-reg">+ Register Your Shop</a>
 
-        <div class="right-printer-icon">
-            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-        </div>
+    <h1>QR se PRINT</h1>
+    <p style="font-size: 13px; font-weight: bold; color: #475569;">SCAN • UPLOAD • PAY • PRINT</p>
+    
+    <div class="qr-box">
+        <img src="{{ shop.qr_image_url }}" alt="Shop QR Code">
     </div>
 
-    <div class="steps-bar">
-        SCAN &bull; UPLOAD &bull; PAY &bull; PRINT
-    </div>
-
-    <div class="content">
-        <div class="step-icon-box">
-            <h4>1. SCAN</h4>
-            <span class="icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-            </span>
-            QR Code<br>স্ক্যান কৰক
-        </div>
-        
-        <div class="arrow-right">&#10132;</div>
-
-        <div class="main-qr-box">
-            <img src="{{ shop.qr_image_url }}" alt="QR Code">
-        </div>
-
-        <div class="arrow-right">&#10132;</div>
-
-        <div class="step-icon-box">
-            <h4>3. PRINT</h4>
-            <span class="icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                    <rect x="6" y="14" width="12" height="8"></rect>
-                </svg>
-            </span>
-            Automatic<br>Print হব
-        </div>
-    </div>
-
-    <div class="upload-pay-area">
-        <div class="upload-pay-badge">
-            <span class="upload-icon">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            </span>
-            2. UPLOAD & PAY (ফাইল আপলোড কৰক Payment কৰক)
-        </div>
-    </div>
-
-    <div class="footer-banner">
-        <span class="print-icon">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-            </svg>
-        </span> ⚡ AUTOMATIC PRINT ⚡
-    </div>
-# অ্যাডমিন লগইন ও ড্যাশবোর্ড রাউট
-@app.route('/admin', methods=['GET', 'POST'])
-def admin_login():
-    if request.method == 'POST':
-        password = request.form.get('password')
-        # এখানে আপনার পছন্দমতো অ্যাডমিন পাসওয়ার্ড দিতে পারেন (যেমন: kamrul123)
-        if password == 'kamrul123':
-            return redirect(url_for('admin_dashboard'))
-        else:
-            return "ভুল পাসওয়ার্ড! দয়া করে সঠিক পাসওয়ার্ড দিন।"
-    return '''
-        <form method="POST" style="max-width: 300px; margin: 100px auto; font-family: sans-serif; text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
-            <h3>Admin Login</h3>
-            <input type="password" name="password" placeholder="Admin Password" required style="width: 100%; padding: 8px; margin-bottom: 10px;"><br>
-            <button type="submit" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Login</button>
-        </form>
-    '''
-
-# অ্যাডমিন ড্যাশবোর্ড (সব দোকানদারদের তালিকা এবং স্ট্যাটাস পরিবর্তনের অপশন)
-@app.route('/admin/dashboard')
-def admin_dashboard():
-    shops = Shop.query.all()
-    return render_template('admin.html', shops=shops)
-
-# পেমেন্ট অ্যাপ্রুভ বা is_paid স্ট্যাটাস টগল করার রাউট
-@app.route('/admin/approve/<int:shop_id>')
-def approve_shop(shop_id):
-    shop = Shop.query.get_or_404(shop_id)
-    shop.is_paid = not shop.is_paid # স্ট্যাটাস পরিবর্তন হবে (True থাকলে False, False থাকলে True)
-    db.session.commit()
-    return redirect(url_for('admin_dashboard'))
-  
-    <div class="shop-info-area">
-        <div class="developer-info">Developed by: <span>Kamrul Online Service</span></div>
-    </div>
-    <div class="shop-info">
-        <p>AVAILABLE ONLY AT</p>
-        <h2>{{ shop.shop_name }}</h2>
-        <h3>{{ shop.address }}</h3>
+    <div class="footer-box">
+        <b>{{ shop.shop_name }}</b><br>
+        <span style="font-size: 12px;">{{ shop.address }}</span>
     </div>
 </div>
 
