@@ -53,7 +53,7 @@ def view_shop(shop_id):
         'address': shop.address,
         'qr_image_url': shop.qr_image_url
     }
-    return render_template('index.html', shop=shop=shop_data) if 'shop_data' in locals() else render_template('index.html', shop=shop_data)
+    return render_template('index.html', shop=shop_data)
 
 # নতুন দোকান রেজিস্টার ফর্ম
 @app.route('/register', methods=['GET', 'POST'])
