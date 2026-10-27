@@ -264,7 +264,38 @@
             </svg>
         </span> ⚡ AUTOMATIC PRINT ⚡
     </div>
+# অ্যাডমিন লগইন ও ড্যাশবোর্ড রাউট
+@app.route('/admin', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        # এখানে আপনার পছন্দমতো অ্যাডমিন পাসওয়ার্ড দিতে পারেন (যেমন: kamrul123)
+        if password == 'kamrul123':
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return "ভুল পাসওয়ার্ড! দয়া করে সঠিক পাসওয়ার্ড দিন।"
+    return '''
+        <form method="POST" style="max-width: 300px; margin: 100px auto; font-family: sans-serif; text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+            <h3>Admin Login</h3>
+            <input type="password" name="password" placeholder="Admin Password" required style="width: 100%; padding: 8px; margin-bottom: 10px;"><br>
+            <button type="submit" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Login</button>
+        </form>
+    '''
 
+# অ্যাডমিন ড্যাশবোর্ড (সব দোকানদারদের তালিকা এবং স্ট্যাটাস পরিবর্তনের অপশন)
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    shops = Shop.query.all()
+    return render_template('admin.html', shops=shops)
+
+# পেমেন্ট অ্যাপ্রুভ বা is_paid স্ট্যাটাস টগল করার রাউট
+@app.route('/admin/approve/<int:shop_id>')
+def approve_shop(shop_id):
+    shop = Shop.query.get_or_404(shop_id)
+    shop.is_paid = not shop.is_paid # স্ট্যাটাস পরিবর্তন হবে (True থাকলে False, False থাকলে True)
+    db.session.commit()
+    return redirect(url_for('admin_dashboard'))
+  
     <div class="shop-info-area">
         <div class="developer-info">Developed by: <span>Kamrul Online Service</span></div>
     </div>
