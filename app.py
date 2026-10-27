@@ -89,7 +89,7 @@ def subscribe(shop_id):
         
     return render_template('subscribe.html', shop=shop)
 
-# অ্যাডমিন লগইন পেজ (ইউজারনেম ও পাসওয়ার্ড সহ)
+# অ্যাডমিন লগইন পেজ
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -99,9 +99,9 @@ def admin_login():
         if username == 'admin' and password == 'kamrul123':
             return redirect(url_for('admin_dashboard'))
         else:
-            return "ভুল ইউজারনেম অথবা পাসওয়ার্ড! <a href='/admin'>다시 시도</a>"
+            return "ভুল ইউজারনেম অথবা পাসওয়ার্ড! দয়া করে সঠিক তথ্য দিন।"
             
-    return '''
+    return render_template('admin_login.html')
         <form method="POST" style="max-width: 320px; margin: 100px auto; font-family: sans-serif; text-align: center; padding: 25px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
             <h3 style="color: #1e293b; margin-bottom: 20px;">Admin Login</h3>
             <input type="text" name="username" placeholder="Admin Username" required style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;"><br>
