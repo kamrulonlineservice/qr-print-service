@@ -2,84 +2,274 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kamrul Online Service - Upload</title>
+    <title>QR se Print - {{ shop.shop_name }}</title>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f8fafc; margin: 0; padding: 0; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; }
-        .container { background: #fff; padding: 15px; width: 100%; max-width: 480px; min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 15px rgba(0,0,0,0.05); }
-        .main-content { flex: 1; }
-        .shop-header { background: linear-gradient(135deg, #0f172a, #1e3a8a); color: #fff; padding: 15px; border-radius: 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .printer-icon { background: rgba(255,255,255,0.15); padding: 10px; border-radius: 12px; font-size: 24px; }
-        .shop-info h3 { margin: 0; font-size: 15px; font-weight: 700; }
-        .shop-info p { margin: 3px 0 6px 0; font-size: 10px; opacity: 0.85; }
-        .rates { display: flex; gap: 6px; }
-        .rate-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: bold; }
-        .rate-bw { background: rgba(255,255,255,0.2); color: #fff; }
-        .rate-color { background: #db2777; color: #fff; }
-        .steps { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 11px; font-weight: bold; color: #64748b; background: #f1f5f9; padding: 10px; border-radius: 12px; text-align: center; }
-        .steps span.active { color: #db2777; }
-        .whatsapp-box { background: #fdf4ff; border: 2px solid #f0abfc; padding: 12px; border-radius: 14px; margin-bottom: 15px; }
-        .whatsapp-box label { font-size: 11px; font-weight: bold; color: #86198f; display: block; margin-bottom: 5px; }
-        .whatsapp-input { width: 100%; padding: 10px; border: 1px solid #e879f9; border-radius: 8px; font-size: 13px; outline: none; background: #fff; }
-        .upload-card { background: #faf5ff; border: 2px dashed #c084fc; padding: 15px; border-radius: 16px; text-align: center; margin-bottom: 15px; }
-        .upload-title { font-size: 15px; font-weight: 800; color: #6b21a8; margin-bottom: 4px; }
-        .upload-subtitle { font-size: 10px; color: #6b7280; margin-bottom: 10px; }
-        .format-badges { display: flex; justify-content: center; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-        .badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: bold; }
-        .b-pdf { background: #fee2e2; color: #991b1b; }
-        .b-jpg { background: #dcfce7; color: #166534; }
-        .b-png { background: #e0e7ff; color: #3730a3; }
-        .file-drop-area { border: 2px dashed #a855f7; background: #fff; padding: 15px; border-radius: 12px; cursor: pointer; position: relative; }
-        .file-input { position: absolute; left: 0; top: 0; height: 100%; width: 100%; opacity: 0; cursor: pointer; }
-        .drop-text { font-size: 12px; font-weight: bold; color: #581c87; }
-        .btn-next { background: linear-gradient(135deg, #1e3a8a, #db2777); color: #fff; border: none; padding: 14px; font-size: 15px; font-weight: bold; border-radius: 14px; width: 100%; cursor: pointer; }
-        .admin-link { display: block; text-align: center; margin-top: 15px; font-size: 11px; color: #3b82f6; text-decoration: none; font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #000;
+        }
+        .poster {
+            width: 720px;
+            background: #ffffff;
+            border: 6px solid #1e3a8a;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+        .header {
+            padding: 15px 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .left-printer-icon { position: absolute; left: 35px; }
+        .right-printer-icon { position: absolute; right: 35px; }
+        .header h1 {
+            margin: 0;
+            font-size: 56px;
+            color: #1e3a8a;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .header h1 .small-se {
+            font-size: 38px;
+            font-weight: bold;
+            display: inline-block;
+            transform: rotate(-10deg);
+            margin: 0 8px;
+        }
+        .steps-bar {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 14px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        .content {
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .step-icon-box {
+            border: 3px solid #1e3a8a;
+            border-radius: 14px;
+            padding: 15px;
+            width: 150px;
+            background: #f8fafc;
+            font-size: 15px;
+            line-height: 1.4;
+            text-align: center;
+            font-weight: bold;
+        }
+        .step-icon-box h4 {
+            margin: 0 0 8px 0;
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: 900;
+        }
+        .step-icon-box .icon {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+        }
+        .main-qr-box {
+            border: 5px solid #1e3a8a;
+            border-radius: 20px;
+            padding: 20px;
+            background: #ffffff;
+        }
+        .main-qr-box img {
+            width: 250px;
+            height: 250px;
+            display: block;
+        }
+        .arrow-right {
+            color: #1e3a8a;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        .upload-pay-area {
+            margin: 25px 0;
+        }
+        .upload-pay-badge {
+            border: 3px solid #1e3a8a;
+            border-radius: 40px;
+            padding: 15px 30px;
+            display: inline-flex;
+            align-items: center;
+            background: #f8fafc;
+            color: #1e3a8a;
+            font-weight: 900;
+            font-size: 18px;
+        }
+        .upload-pay-badge .upload-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: #0f172a;
+        }
+        .footer-banner {
+            background: #f59e0b;
+            padding: 16px;
+            color: #000000;
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .footer-banner .print-icon {
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .shop-info-area {
+            margin-bottom: 10px;
+        }
+        .developer-info {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+        }
+        .developer-info span {
+            border: 2px solid #1e3a8a;
+            border-radius: 12px;
+            padding: 3px 12px;
+            color: #1e3a8a;
+            font-weight: 800;
+        }
+        .shop-info {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            margin-top: 15px;
+        }
+        .shop-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #93c5fd;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .shop-info h2 {
+            margin: 8px 0 4px 0;
+            font-size: 28px;
+            color: #facc15;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+        .shop-info h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: pre-line;
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="main-content">
-        <div class="shop-header">
-            <div class="printer-icon">🖨️</div>
-            <div class="shop-info">
-                <h3>Kamrul Online Service</h3>
-                <p>Gaon Pradhan Office, Goroimari, Morigaon, Assam - 782104</p>
-                <div class="rates">
-                    <span class="rate-tag rate-bw">B&W: ₹5/page</span>
-                    <span class="rate-tag rate-color">Color: ₹10/page</span>
-                </div>
-            </div>
+
+<div class="poster">
+    <div class="header">
+        <div class="left-printer-icon">
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
         </div>
-        <div class="steps">
-            <span class="active">1. Upload ✓</span>
-            <span>2. Edit</span>
-            <span>3. Preview</span>
-            <span>4. Pay</span>
+        
+        <h1>QR <span class="small-se">se</span> PRINT</h1>
+
+        <div class="right-printer-icon">
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
         </div>
-        <form action="/edit" method="POST" enctype="multipart/form-data">
-            <div class="whatsapp-box">
-                <label>💬 Enter Your WhatsApp Mobile Number:</label>
-                <input type="tel" name="customer_phone" class="whatsapp-input" placeholder="e.g. 9876543210" required>
-            </div>
-            <div class="upload-card">
-                <div class="upload-title">Upload Document</div>
-                <div class="upload-subtitle">PDF, JPG, PNG — all supported</div>
-                <div class="format-badges">
-                    <span class="badge b-pdf">PDF</span>
-                    <span class="badge b-jpg">JPG</span>
-                    <span class="badge b-png">PNG</span>
-                </div>
-                <div class="file-drop-area">
-                    <div style="font-size: 18px; margin-bottom: 4px;">📤</div>
-                    <div class="drop-text">Tap here or drag & drop your file</div>
-                    <input type="file" name="file" class="file-input" required>
-                </div>
-            </div>
-            <button type="submit" class="btn-next">Next ➔</button>
-        </form>
-        <a href="/admin" class="admin-link" target="_blank">💻 Open Shop Owner Dashboard (Counter Orders)</a>
+    </div>
+
+    <div class="steps-bar">
+        SCAN &bull; UPLOAD &bull; PAY &bull; PRINT
+    </div>
+
+    <div class="content">
+        <div class="step-icon-box">
+            <h4>1. SCAN</h4>
+            <span class="icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            </span>
+            QR Code<br>স্ক্যান কৰক
+        </div>
+        
+        <div class="arrow-right">&#10132;</div>
+
+        <div class="main-qr-box">
+            <img src="{{ shop.qr_image_url }}" alt="QR Code">
+        </div>
+
+        <div class="arrow-right">&#10132;</div>
+
+        <div class="step-icon-box">
+            <h4>3. PRINT</h4>
+            <span class="icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+            </span>
+            Automatic<br>Print হব
+        </div>
+    </div>
+
+    <div class="upload-pay-area">
+        <div class="upload-pay-badge">
+            <span class="upload-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </span>
+            2. UPLOAD & PAY (ফাইল আপলোড কৰক Payment কৰক)
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <span class="print-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+        </span> ⚡ AUTOMATIC PRINT ⚡
+    </div>
+
+    <div class="shop-info-area">
+        <div class="developer-info">Developed by: <span>Kamrul Online Service</span></div>
+    </div>
+    <div class="shop-info">
+        <p>AVAILABLE ONLY AT</p>
+        <h2>{{ shop.shop_name }}</h2>
+        <h3>{{ shop.address }}</h3>
     </div>
 </div>
+
 </body>
 </html>
