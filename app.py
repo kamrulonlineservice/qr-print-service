@@ -10,20 +10,20 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shops.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# শপ ডেটাবেজ মডেল (ট্রায়াল এবং পেমেন্ট স্ট্যাটাস সহ)
+# শপ ডেটাবেজ মডেল
 class Shop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     shop_name = db.Column(db.String(150), nullable=False)
     owner_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.Text, nullable=False)
     qr_image_url = db.Column(db.String(300), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow) # রেজিস্ট্রেশনের সময়
-    is_paid = db.Column(db.Boolean, default=False) # পেমেন্ট স্ট্যাটাস
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_paid = db.Column(db.Boolean, default=False)
 
 with app.app_context():
     db.create_all()
 
-# হোম পেজ - প্রথম বা ডিফল্ট শপ দেখানোর জন্য
+# হোম পেজ
 @app.route('/')
 def index():
     shop = Shop.query.first()
@@ -37,16 +37,14 @@ def index():
     
     return redirect(url_for('view_shop', shop_id=shop.id))
 
-# নির্দিষ্ট দোকানদারের পেজ (৩ দিনের ট্রায়াল ও সাবস্ক্রিপশন চেক সহ)
+# নির্দিষ্ট দোকানদারের পেজ
 @app.route('/shop/<int:shop_id>')
 def view_shop(shop_id):
     shop = Shop.query.get_or_404(shop_id)
     
-    # ৩ দিনের ট্রায়াল সময় হিসাব করা
     expiry_date = shop.created_at + timedelta(days=3)
     is_trial_active = datetime.utcnow() < expiry_date
     
-    # যদি ৩ দিন পার হয়ে যায় এবং পেমেন্ট না করা থাকে, তবে সাবস্ক্রিপশন পেজে পাঠিয়ে দেবে
     if not is_trial_active and not shop.is_paid:
         return redirect(url_for('subscribe', shop_id=shop.id))
         
@@ -57,7 +55,7 @@ def view_shop(shop_id):
     }
     return render_template('index.html', shop=shop_data)
 
-# নতুন দোকান রেজিস্টার ফর্ম (৩ দিনের ফ্রি ট্রায়াল শুরু হবে)
+# নতুন দোকান রেজিস্টার ফর্ম
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -81,7 +79,7 @@ def register():
     
     return render_template('register.html')
 
-# সাবস্ক্রিপশন বা পেমেন্ট পেজ (৩ দিন পার হলে এখানে আসবে)
+# সাবস্ক্রিপশন বা পেমেন্ট পেজ
 @app.route('/subscribe/<int:shop_id>', methods=['GET', 'POST'])
 def subscribe(shop_id):
     shop = Shop.query.get_or_404(shop_id)
@@ -91,18 +89,17 @@ def subscribe(shop_id):
         
     return render_template('subscribe.html', shop=shop)
 
-# অ্যাডমিন লগইন পেজ (ইউজারনেম এবং পাসওয়ার্ড সহ)
+# অ্যাডমিন লগইন পেজ (ইউজারনেম ও পাসওয়ার্ড সহ)
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         
-        # এখানে আপনার পছন্দমতো ইউজারনেম (যেমন: admin) এবং পাসওয়ার্ড (যেমন: kamrul123) সেট করতে পারেন
         if username == 'admin' and password == 'kamrul123':
             return redirect(url_for('admin_dashboard'))
         else:
-            return "ভুল ইউজারনেম অথবা পাসওয়ার্ড! দয়া করে সঠিক তথ্য দিন।"
+            return "ভুল ইউজারনেম অথবা পাসওয়ার্ড! <a href='/admin'>다시 시도</a>"
             
     return '''
         <form method="POST" style="max-width: 320px; margin: 100px auto; font-family: sans-serif; text-align: center; padding: 25px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
