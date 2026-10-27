@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Registration - QR se Print</title>
+    <style>
+        body { font-family: sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .form-box { background: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; }
+        h2 { color: #1e3a8a; text-align: center; margin-bottom: 20px; }
+        label { font-weight: bold; color: #333; display: block; margin-top: 10px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 2px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
+        button { background: #1e3a8a; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #1d4ed8; }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>Shop Registration</h2>
+    <form method="POST">
+        <label>দোকানের নাম (Shop Name):</label>
+        <input type="text" name="shop_name" required placeholder="যেমন: Kamrul Online Service">
+
+        <label>দোকানদারের নাম (Owner Name):</label>
+        <input type="text" name="owner_name" required placeholder="আপনার নাম">
+
+        <label>পূর্ণ ঠিকানা (Address):</label>
+        <textarea name="address" rows="3" required placeholder="গ্রাম, পোস্ট, জেলা, পিন"></textarea>
+
+        <label>আপনার পেমেন্ট কিউআর কোডের ইমেজ লিংক (QR Image URL):</label>
+        <input type="text" name="qr_image_url" required placeholder="গিটহাব বা ইমেজ লিংক">
+
+        <button type="submit">সিস্টেম চালু করুন</button>
+    </form>
+</div>
+
+</body>
+</html>
