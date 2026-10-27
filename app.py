@@ -112,7 +112,6 @@ def admin_login():
             <button type="submit" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">Login</button>
         </form>
     '''
-    '''
 
 # অ্যাডমিন ড্যাশবোর্ড
 @app.route('/admin/dashboard')
