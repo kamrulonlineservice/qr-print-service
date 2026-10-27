@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Subscription Required - QR se Print</title>
+    <style>
+        body { font-family: sans-serif; background: #fef2f2; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .sub-box { background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 450px; text-align: center; border-top: 6px solid #dc2626; }
+        h2 { color: #dc2626; margin-bottom: 10px; }
+        p { color: #475569; font-size: 15px; line-height: 1.5; }
+        .qr-placeholder { margin: 20px 0; }
+        .qr-placeholder img { width: 180px; height: 180px; border: 2px solid #cbd5e1; border-radius: 8px; }
+        button { background: #16a34a; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: bold; margin-top: 15px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #15803d; }
+    </style>
+</head>
+<body>
+
+<div class="sub-box">
+    <h2>ট্রেয়াল মেয়াদ শেষ! (Trial Expired)</h2>
+    <p>প্রিয় <b>{{ shop.owner_name }}</b>, আপনার দোকানের <b>{{ shop.shop_name }}</b> ফ্রি ট্রায়ালের ৩ দিন সময় শেষ হয়ে গেছে। সার্ভিসটি নিয়মিত চালু রাখতে নিচের কিউআর কোডে মাসিক সাবস্ক্রিপশন ফি পেমেন্ট করুন।</p>
+    
+    <div class="qr-placeholder">
+        <!-- এখানে আপনার বা আপনার কোম্পানির পেমেন্ট কিউআর কোড দিতে পারেন -->
+        <img src="https://raw.githubusercontent.com/kamrulonlineservice/qr-print-service/main/static/qr.png" alt="Admin QR">
+    </div>
+
+    <form method="POST">
+        <button type="submit">আমি পেমেন্ট করেছি (Confirm Payment)</button>
+    </form>
+</div>
+
+</body>
+</html>
