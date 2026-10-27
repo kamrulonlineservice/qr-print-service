@@ -23,7 +23,7 @@ class Shop(db.Model):
 with app.app_context():
     db.create_all()
 
-# হোম পেজ - প্রথম বা ডিফল্ট শপ দেখানোর জন্য (অথবা সরাসরি রেজিস্ট্রেশন পেজে রিডাইরেক্ট করতে পারেন)
+# হোম পেজ - প্রথম বা ডিফল্ট শপ দেখানোর জন্য
 @app.route('/')
 def index():
     shop = Shop.query.first()
@@ -35,7 +35,6 @@ def index():
         }
         return render_template('index.html', shop=shop_data)
     
-    # একাধিক দোকান থাকলে তাদের নিজস্ব ইউনিক লিংকে যাওয়ার জন্য রিডাইরেক্ট করতে পারেন
     return redirect(url_for('view_shop', shop_id=shop.id))
 
 # নির্দিষ্ট দোকানদারের পেজ (৩ দিনের ট্রায়াল ও সাবস্ক্রিপশন চেক সহ)
@@ -67,7 +66,6 @@ def register():
         address = request.form.get('address')
         qr_image_url = request.form.get('qr_image_url')
 
-        # নতুন শপ সেভ করা (স্বয়ংক্রয়ভাবে বর্তমান সময় এবং ট্রায়াল শুরু হবে)
         new_shop = Shop(
             shop_name=shop_name, 
             owner_name=owner_name, 
@@ -79,7 +77,6 @@ def register():
         db.session.add(new_shop)
         db.session.commit()
 
-        # রেজিস্ট্রেশন সফল হলে সরাসরি ওই দোকানের ইউনিক লিংকে পাঠিয়ে দেবে
         return redirect(url_for('view_shop', shop_id=new_shop.id))
     
     return render_template('register.html')
@@ -90,11 +87,40 @@ def subscribe(shop_id):
     shop = Shop.query.get_or_404(shop_id)
     
     if request.method == 'POST':
-        # দোকানদার পেমেন্ট করার পর সাবমিট করলে আপনি চাইলে এখানে ট্রানজেকশন আইডি রাখতে পারেন
-        # আপাতত নোটিফিকেশন বা ইনফো দেখাতে পারেন যে অ্যাডমিন অ্যাপ্রুভ করলে চালু হবে
         return "আপনার পেমেন্ট রিকোয়েস্ট জমা হয়েছে। খুব শীঘ্রই অ্যাকাউন্টটি একটিভ করে দেওয়া হবে।"
         
     return render_template('subscribe.html', shop=shop)
+
+# অ্যাডমিন লগইন পেজ
+@app.route('/admin', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        password = request.form.get('password')
+        if password == 'kamrul123':
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return "ভুল পাসওয়ার্ড! দয়া করে সঠিক পাসওয়ার্ড দিন।"
+    return '''
+        <form method="POST" style="max-width: 300px; margin: 100px auto; font-family: sans-serif; text-align: center; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+            <h3>Admin Login</h3>
+            <input type="password" name="password" placeholder="Admin Password" required style="width: 100%; padding: 8px; margin-bottom: 10px;"><br>
+            <button type="submit" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">Login</button>
+        </form>
+    '''
+
+# অ্যাডমিন ড্যাশবোর্ড
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    shops = Shop.query.all()
+    return render_template('admin.html', shops=shops)
+
+# পেমেন্ট অ্যাপ্রুভ বা স্ট্যাটাস টগল করার রাউট
+@app.route('/admin/approve/<int:shop_id>')
+def approve_shop(shop_id):
+    shop = Shop.query.get_or_404(shop_id)
+    shop.is_paid = not shop.is_paid
+    db.session.commit()
+    return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
     app.run(debug=True)
