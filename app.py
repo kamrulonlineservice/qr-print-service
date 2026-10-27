@@ -53,7 +53,7 @@ def view_shop(shop_id):
         'address': shop.address,
         'qr_image_url': shop.qr_image_url
     }
-    return render_template('index.html', shop=shop_data)
+    return render_template('index.html', shop=shop=shop_data) if 'shop_data' in locals() else render_template('index.html', shop=shop_data)
 
 # নতুন দোকান রেজিস্টার ফর্ম
 @app.route('/register', methods=['GET', 'POST'])
@@ -89,7 +89,7 @@ def subscribe(shop_id):
         
     return render_template('subscribe.html', shop=shop)
 
-# অ্যাডমিন লগইন পেজ
+# অ্যাডমিন লগইন পেজ (HTML ফাইলের মাধ্যমে)
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
@@ -102,13 +102,6 @@ def admin_login():
             return "ভুল ইউজারনেম অথবা পাসওয়ার্ড! দয়া করে সঠিক তথ্য দিন।"
             
     return render_template('admin_login.html')
-        <form method="POST" style="max-width: 320px; margin: 100px auto; font-family: sans-serif; text-align: center; padding: 25px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-            <h3 style="color: #1e293b; margin-bottom: 20px;">Admin Login</h3>
-            <input type="text" name="username" placeholder="Admin Username" required style="width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;"><br>
-            <input type="password" name="password" placeholder="Admin Password" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box;"><br>
-            <button type="submit" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%;">Login</button>
-        </form>
-    '''
 
 # অ্যাডমিন ড্যাশবোর্ড
 @app.route('/admin/dashboard')
