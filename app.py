@@ -14,7 +14,7 @@ class Shop(db.Model):
     shop_name = db.Column(db.String(150), nullable=False)
     owner_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.Text, nullable=False)
-    upi_id = db.Column(db.String(100), nullable=False)  # UPI ID ফিল্ড
+    upi_id = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_paid = db.Column(db.Boolean, default=False)
 
@@ -30,7 +30,6 @@ def index():
             'address': 'Gaon Pradhan office vill: Garoimari p.o:garoimari dist: Morigaon pin-782104',
             'upi_id': 'kamrul@paytm'
         }
-        # UPI লিংক থেকে অটোমেটিক কিউআর কোড জেনারেট করার লিংক
         upi_url = f"upi://pay?pa={shop_data['upi_id']}&pn={shop_data['shop_name']}"
         qr_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={upi_url}"
         
@@ -54,7 +53,7 @@ def view_shop(shop_id):
     shop_data = {
         'shop_name': shop.shop_name,
         'address': shop.address,
-        'qr_url': qr_url
+        'upi_url': qr_url
     }
     return render_template('index.html', shop=shop_data, qr_url=qr_url)
 
