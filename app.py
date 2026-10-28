@@ -5,25 +5,22 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# ডেটাবেজ কনফিগারেশন
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shops.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# শপ ডেটাবেজ মডেল
 class Shop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     shop_name = db.Column(db.String(150), nullable=False)
     owner_name = db.Column(db.String(100), nullable=False)
     address = db.Column(db.Text, nullable=False)
-    qr_image_url = db.Column(db.String(300), nullable=False)
+    upi_id = db.Column(db.String(100), nullable=False)  # UPI ID ফিল্ড
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_paid = db.Column(db.Boolean, default=False)
 
 with app.app_context():
     db.create_all()
 
-# হোম পেজ
 @app.route('/')
 def index():
     shop = Shop.query.first()
@@ -31,13 +28,16 @@ def index():
         shop_data = {
             'shop_name': 'KAMRUL ONLINE SERVICE',
             'address': 'Gaon Pradhan office vill: Garoimari p.o:garoimari dist: Morigaon pin-782104',
-            'qr_image_url': 'https://raw.githubusercontent.com/kamrulonlineservice/qr-print-service/main/static/qr.png'
+            'upi_id': 'kamrul@paytm'
         }
-        return render_template('index.html', shop=shop_data)
+        # UPI লিংক থেকে অটোমেটিক কিউআর কোড জেনারেট করার লিংক
+        upi_url = f"upi://pay?pa={shop_data['upi_id']}&pn={shop_data['shop_name']}"
+        qr_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={upi_url}"
+        
+        return render_template('index.html', shop=shop_data, qr_url=qr_url)
     
     return redirect(url_for('view_shop', shop_id=shop.id))
 
-# নির্দিষ্ট দোকানদারের পেজ
 @app.route('/shop/<int:shop_id>')
 def view_shop(shop_id):
     shop = Shop.query.get_or_404(shop_id)
@@ -48,27 +48,29 @@ def view_shop(shop_id):
     if not is_trial_active and not shop.is_paid:
         return redirect(url_for('subscribe', shop_id=shop.id))
         
+    upi_url = f"upi://pay?pa={shop.upi_id}&pn={shop.shop_name}"
+    qr_url = f"https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={upi_url}"
+
     shop_data = {
         'shop_name': shop.shop_name,
         'address': shop.address,
-        'qr_image_url': shop.qr_image_url
+        'qr_url': qr_url
     }
-    return render_template('index.html', shop=shop_data)
+    return render_template('index.html', shop=shop_data, qr_url=qr_url)
 
-# নতুন দোকান রেজিস্টার ফর্ম
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         shop_name = request.form.get('shop_name')
         owner_name = request.form.get('owner_name')
         address = request.form.get('address')
-        qr_image_url = request.form.get('qr_image_url')
+        upi_id = request.form.get('upi_id')
 
         new_shop = Shop(
             shop_name=shop_name, 
             owner_name=owner_name, 
             address=address, 
-            qr_image_url=qr_image_url,
+            upi_id=upi_id,
             created_at=datetime.utcnow(),
             is_paid=False
         )
@@ -79,37 +81,29 @@ def register():
     
     return render_template('register.html')
 
-# সাবস্ক্রিপশন বা পেমেন্ট পেজ
 @app.route('/subscribe/<int:shop_id>', methods=['GET', 'POST'])
 def subscribe(shop_id):
     shop = Shop.query.get_or_404(shop_id)
-    
     if request.method == 'POST':
         return "আপনার পেমেন্ট রিকোয়েস্ট জমা হয়েছে। খুব শীঘ্রই অ্যাকাউন্টটি একটিভ করে দেওয়া হবে।"
-        
     return render_template('subscribe.html', shop=shop)
 
-# অ্যাডমিন লগইন পেজ (HTML ফাইলের মাধ্যমে)
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        
         if username == 'admin' and password == 'kamrul123':
             return redirect(url_for('admin_dashboard'))
         else:
             return "ভুল ইউজারনেম অথবা পাসওয়ার্ড! দয়া করে সঠিক তথ্য দিন।"
-            
     return render_template('admin_login.html')
 
-# অ্যাডমিন ড্যাশবোর্ড
 @app.route('/admin/dashboard')
 def admin_dashboard():
     shops = Shop.query.all()
     return render_template('admin.html', shops=shops)
 
-# পেমেন্ট অ্যাপ্রুভ বা স্ট্যাটাস টগল করার রাউট
 @app.route('/admin/approve/<int:shop_id>')
 def approve_shop(shop_id):
     shop = Shop.query.get_or_404(shop_id)
