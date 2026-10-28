@@ -2,37 +2,28 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <title>Shop Registration - QR se Print</title>
+    <title>দোকানদার রেজিস্ট্রেশন - QR Se Print</title>
     <style>
-        body { font-family: sans-serif; background: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .register-box { max-width: 400px; width: 100%; padding: 25px; border: 1px solid #cbd5e1; border-radius: 10px; background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h3 { color: #1e293b; text-align: center; margin-bottom: 20px; }
-        label { font-size: 14px; font-weight: bold; color: #475569; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
-        button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
-        button:hover { background: #1d4ed8; }
+        body { font-family: Arial, sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+        h2 { text-align: center; color: #333; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        p { text-align: center; }
     </style>
 </head>
 <body>
-
-<div class="register-box">
-    <h3>Shop Registration</h3>
-    <form method="POST">
-        <label>দোকানের নাম (Shop Name):</label>
-        <input type="text" name="shop_name" placeholder="যেমন: Kamrul Online Service" required>
-
-        <label>দোকানদারের নাম (Owner Name):</label>
-        <input type="text" name="owner_name" placeholder="আপনার নাম" required>
-
-        <label>পূর্ণ ঠিকানা (Address):</label>
-        <input type="text" name="address" placeholder="গ্রাম, পোস্ট, জেলা" required>
-
-        <label>আপনার পেমেন্ট UPI ID (যেমন: 9876543210@paytm):</label>
-        <input type="text" name="upi_id" placeholder="UPI ID দিন" required>
-
-        <button type="submit">সিস্টেম চালু করুন</button>
-    </form>
-</div>
-
+    <div class="card">
+        <h2>দোকান রেজিস্টার করুন</h2>
+        <form method="POST">
+            <input type="text" name="shop_name" placeholder="দোকানের নাম (যেমন: Kamrul Online)" required>
+            <input type="text" name="owner_name" placeholder="মালিকের নাম" required>
+            <input type="email" name="email" placeholder="ইমেইল অ্যাড্রেস" required>
+            <input type="password" name="password" placeholder="পাসওয়ার্ড" required>
+            <button type="submit">রেজিস্ট্রেশন করুন</button>
+        </form>
+        <p>আগে থেকেই অ্যাকাউন্ট আছে? <a href="/login">লগইন করুন</a></p>
+    </div>
 </body>
 </html>
