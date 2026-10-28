@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>ড্যাশবোর্ড - QR Se Print</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
+        .header { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .content { margin-top: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .logout-btn { background: #dc3545; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; }
+        .logout-btn:hover { background: #c82333; }
+        .qr-box { background: #e9ecef; padding: 15px; border-radius: 5px; margin-top: 15px; word-break: break-all; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>স্বাগতম, {{ owner_name }} ({{ shop_name }})</h2>
+        <a href="/logout" class="logout-btn">লগআউট</a>
+    </div>
+
+    <div class="content">
+        <h3>আপনার দোকানের প্রিন্টিং ড্যাশবোর্ড</h3>
+        <p>আপনার কাস্টমাররা এই লিংক বা কিউআর কোড স্ক্যান করে সরাসরি ফাইল পাঠাতে পারবেন:</p>
+        <div class="qr-box">
+            <strong>আপনার শপ কিউআর লিংক:</strong> <a href="{{ qr_link }}" target="_blank">{{ qr_link }}</a>
+        </div>
+        <p><em>(পরবর্তী ধাপে এখানে লাইভ প্রিন্ট রিকোয়েস্ট এবং প্রিন্টার স্ট্যাটাস যুক্ত করা হবে)</em></p>
+    </div>
+</body>
+</html>
