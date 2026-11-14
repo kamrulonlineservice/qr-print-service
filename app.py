@@ -331,7 +331,7 @@ def pdf_page_image(job_id, page_no):
 
 @app.route('/')
 def index():
-    return redirect(url_for('shop_login'))
+    return redirect(url_for('index.html'))
 
 
 
