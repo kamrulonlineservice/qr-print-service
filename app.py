@@ -2,7 +2,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from db import init_db
-import fitz  # PyMuPDF
+import pymupdf
 import base64
 from PIL import Image
 import sqlite3
