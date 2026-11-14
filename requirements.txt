@@ -6,3 +6,4 @@ Werkzeug
 PyMuPDF
 Pillow
 qrcode
+pdf2image
