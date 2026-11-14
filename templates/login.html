@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop Login - Scan&Print</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #FFFBF7; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .card { background: #ffffff; border: 1px solid #e7e5e4; border-radius: 24px; padding: 2rem; width: 100%; max-width: 380px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
+    h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #1c1917; margin-top: 0; text-align: center; }
+    .form-group { margin-bottom: 1.25rem; }
+    label { font-size: 0.85rem; font-weight: 700; color: #57534e; display: block; margin-bottom: 0.5rem; }
+    input[type="email"], input[type="password"] { width: 100%; padding: 0.75rem; border: 1px solid #d6d3d1; border-radius: 12px; font-size: 0.95rem; box-sizing: border-box; outline: none; }
+    input:focus { border-color: #F0245C; }
+    .btn-submit { background: #F0245C; color: white; border: none; padding: 0.85rem; width: 100%; border-radius: 9999px; font-weight: 700; cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 12px rgba(240, 36, 92, 0.25); }
+    .link-text { display: block; text-align: center; margin-top: 1.25rem; color: #78716c; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .link-text span { color: #F0245C; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔐 Shop Owner Login</h2>
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label>Email Address:</label>
+        <input type="email" name="email" placeholder="shop@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-submit">Login to Dashboard</button>
+    </form>
+    <a href="/register" class="link-text">Don't have an account? <span>Register your shop</span></a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Support Chat</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { background: #1e1e1e; width: 450px; height: 600px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; border: 1px solid #333; overflow: hidden; }
+        .chat-header { background: #222; padding: 15px; text-align: center; border-bottom: 1px solid #333; font-weight: bold; font-size: 18px; color: #fff; }
+        .chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message { padding: 10px 14px; border-radius: 8px; max-width: 75%; font-size: 14px; line-height: 1.4; word-break: break-word; }
+        .shop-msg { background: #0d6efd; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .admin-msg { background: #2a2a2a; color: #fff; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid #444; }
+        .chat-form { display: flex; padding: 12px; background: #222; border-top: 1px solid #333; }
+        .chat-form input { flex: 1; padding: 10px; background: #2a2a2a; border: 1px solid #444; border-radius: 6px; color: #fff; outline: none; }
+        .chat-form button { background: #28a745; color: white; border: none; padding: 10px 18px; margin-left: 8px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .chat-form button:hover { background: #218838; }
+        .back-link { display: block; text-align: center; background: #1a1a1a; padding: 8px; text-decoration: none; color: #aaa; font-size: 13px; border-top: 1px solid #333; }
+        .back-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">💬 Live Support Chat</div>
+        
+        <div class="chat-box" id="chatBox">
+            {% for msg in messages %}
+                {% if msg.sender == 'shopkeeper' or msg.sender == 'shop' %}
+                    <div class="message shop-msg">
+                        <b>You:</b> {{ msg.message }}
+                    </div>
+                {% else %}
+                    <div class="message admin-msg">
+                        <b>Admin:</b> {{ msg.message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <form action="{{ url_for('shop_chat', shop_id=shop_id) }}" method="POST" class="chat-form">
+            <input type="hidden" name="sender" value="shop"> 
+            <input type="text" name="message" placeholder="Type your message..." autocomplete="off" required>
+            <button type="submit">Send</button>
+        </form>
+
+        <a href="{{ url_for('shop_dashboard', shop_id=shop_id) }}" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    </script>
+</body>
+</html>

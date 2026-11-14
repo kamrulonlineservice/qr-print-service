@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Details - Admin Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
+        .container { max-width: 800px; background: white; margin: 30px auto; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        h3 { color: #1e3a8a; margin-top: 30px; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; }
+        .label { font-weight: bold; color: #555; }
+        .value { color: #333; text-align: right; }
+        
+        /* Recharge History Table Style */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #e2e8f0; padding: 10px; text-align: left; font-size: 14px; }
+        th { background: #007bff; color: white; }
+        tr:nth-child(even) { background: #f8fafc; }
+
+        .back-btn { display: block; text-align: center; margin-top: 25px; background: #007bff; color: white; padding: 10px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .back-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Shop Detailed Information</h2>
+        
+        <div class="info-row"><span class="label">Shop ID:</span> <span class="value">{{ shop.id }}</span></div>
+        <div class="info-row"><span class="label">Shop Name:</span> <span class="value">{{ shop.shop_name }}</span></div>
+        <div class="info-row"><span class="label">Owner Name:</span> <span class="value">{{ shop.owner_name }}</span></div>
+        <div class="info-row"><span class="label">Mobile Number:</span> <span class="value">{{ shop.phone }}</span></div>
+        <div class="info-row"><span class="label">Email Address:</span> <span class="value">{{ shop.email }}</span></div>
+        <div class="info-row">
+            <span class="label">Address:</span> 
+            <span class="value">{{ shop.village }}, {{ shop.district }}, {{ shop.state }} - {{ shop.pincode }}</span>
+        </div>
+        <div class="info-row"><span class="label">Registration Date:</span> <span class="value">{{ shop.registration_date }}</span></div>
+        <div class="info-row"><span class="label">Free Trial Ends:</span> <span class="value">{{ shop.trial_end_date }}</span></div>
+        <div class="info-row"><span class="label">Subscription Ends:</span> <span class="value">{{ shop.subscription_end_date or 'Not Applicable / Expired' }}</span></div>
+        <div class="info-row"><span class="label">Recharge Amount:</span> <span class="value">₹{{ shop.recharge_amount }}</span></div>
+        <div class="info-row"><span class="label">Current Status:</span> <span class="value" style="font-weight: bold; color: {% if shop.status == 'Active' %}green{% else %}red{% endif %};">{{ shop.status }}</span></div>
+
+        <!-- Recharge History Table Section -->
+        <h3>📜 Complete Recharge History</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Plan Name</th>
+                    <th>Amount</th>
+                    <th>UTR Number</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for history in recharge_histories %}
+                <tr>
+                    <td>{{ history[4] }}</td>
+                    <td>{{ history[0] }}</td>
+                    <td>₹{{ history[1] }}</td>
+                    <td>{{ history[2] }}</td>
+                    <td>
+                        {% if history[3] == 'Pending' %}
+                            <span style="background: #f59e0b; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px;">Pending</span>
+                        {% else %}
+                            <span style="background: #10b981; color: white; padding: 3px 8px; border-radius: 4px; font-size: 12px;">Approved</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: #666; padding: 15px;">No recharge history found for this shop.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="back-btn">Back to Admin Dashboard</a>
+    </div>
+</body>
+</html>

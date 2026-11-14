@@ -1,0 +1,19 @@
+<div class="chat-container" style="max-width: 600px; margin: auto; padding: 20px; background: #f9f9f9; border-radius: 8px;">
+    <h3>Admin Chat with Shop: {{ shop_id }}</h3>
+    <div class="message-box" style="height: 350px; overflow-y: scroll; border: 1px solid #ddd; padding: 10px; background: #fff; margin-bottom: 15px;">
+        {% for msg in messages %}
+            <div style="text-align: {{ 'right' if msg.sender == 'admin' else 'left' }}; margin-bottom: 10px;">
+                <span style="display: inline-block; padding: 8px 12px; border-radius: 6px; background: {{ '#007bff' if msg.sender == 'admin' else '#e2e2e2' }}; color: {{ '#fff' if msg.sender == 'admin' else '#000' }};">
+                    {{ msg.message }}
+                </span>
+                <br><small style="font-size: 10px; color: #888;">{{ msg.timestamp.strftime('%H:%M') }}</small>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- ডাইরেক্ট রিপ্লাই ফর্ম -->
+    <form method="POST" style="display: flex; gap: 10px;">
+        <input type="text" name="message" placeholder="Type your reply..." required style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+        <button type="submit" style="padding: 10px 20px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Send Reply</button>
+    </form>
+</div>

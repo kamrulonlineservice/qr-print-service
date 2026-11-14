@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Kamrul Online Service</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+        .header h2 { color: #1e3a8a; margin: 0; }
+        .admin-nav { display: flex; gap: 15px; align-items: center; }
+        .btn-chat-inbox { background: #0284c7; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: bold; position: relative; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-logout { background: #ef4444; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 14px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; font-size: 14px; }
+        th { background: #1e3a8a; color: white; }
+        tr:nth-child(even) { background: #f8fafc; }
+        .action-link { color: #2563eb; text-decoration: none; font-weight: bold; margin-right: 10px; }
+        .badge-active { background: #dcfce7; color: #16a34a; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .badge-inactive { background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>👑 Admin Control Panel</h2>
+            <div class="admin-nav">
+                <!-- লাইভ সাপোর্ট চ্যাট ইনবক্স লিংক ও নোটিফিকেশন ব্যাজ -->
+                <a href="{{ url_for('admin_chat_inbox') }}" class="btn-chat-inbox">
+                    💬 Live Support Inbox
+                    <span id="unread-badge" style="background: #ef4444; color: white; border-radius: 50%; padding: 1px 6px; font-size: 11px; display: none;">0</span>
+                </a>
+                <a href="{{ url_for('admin_logout') }}" class="btn-logout">Logout</a>
+            </div>
+        </div>
+
+        <h3>Registered Shops List & Subscription Status</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Shop Name</th>
+                    <th>Email</th>
+                    <th>Subscription</th>
+                    <th>Recharge</th>
+                    <th>Status</th>
+                    <th>UTR & Request</th>
+                    <th>Extend Validity (Action)</th>
+                    <th>Action / Control</th>
+                    <th style="color: #fff; background-color: #0d6efd; text-align: center;">Today's Revenue</th>
+                </tr>
+            </thead>
+           <tbody>
+            {% for shop in shops %}
+                <tr>
+                    <td>{{ shop.id }}</td>
+                    <td><a href="{{ url_for('admin_shop_detail', shop_id=shop.id) }}" style="text-decoration: none;">{{ shop.shop_name }}</a></td>
+                    <td>{{ shop.email }}</td>
+                    <td>
+                        {% if shop.plan_name %}
+                            <span style="color: #2563eb; font-weight: bold;">{{ shop.plan_name }}</span><br>
+                            <small style="color: #64748b;">Expires: {{ shop.subscription_end_date if shop.subscription_end_date else 'N/A' }}</small>
+                        {% else %}
+                            <span style="color: #2563eb; font-weight: bold;">3-Days Trial</span><br>
+                            <small style="color: #64748b;">Expires: {{ shop.subscription_end_date if shop.subscription_end_date else 'N/A' }}</small>
+                        {% endif %}
+                    </td>
+                    <td>₹{{ shop.recharge_amount if shop.recharge_amount else 0 }}</td>
+                  
+                    <!-- স্ট্যাটাস ব্যাজ সঠিক বিন্যাসে -->
+                    <td>
+                        {% if shop.status|lower == 'inactive' %}
+                            <span class="badge-inactive">Inactive</span>
+                        {% else %}
+                            <span class="badge-active">Active</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- UTR & Request কলাম -->
+                    <td>
+                        {% if shop.pending_utr %}
+                            <span style="background: #f59e0b; color: white; padding: 3px 6px; border-radius: 4px; font-size: 12px;">UTR: {{ shop.pending_utr }}</span><br>
+                            <small style="color: #d97706; font-weight: bold;">{{ shop.pending_plan }}</small>
+                        {% else %}
+                            <span style="color: #78716c; font-size: 13px;">No Request</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- Extend Validity / Approve Action কলাম -->
+                    <td>
+                        {% if shop.pending_utr %}
+                            <a href="/admin/approve_shop/{{ shop.id }}" style="padding: 4px 10px; font-size: 12px; background: #10b981; color: white; border-radius: 4px; text-decoration: none; font-weight: bold;">✅ Approve & +30 Days</a>
+                        {% else %}
+                            <a href="/admin/add_days/{{ shop.id }}" style="padding: 4px 10px; font-size: 12px; background: #3b82f6; color: white; border-radius: 4px; text-decoration: none; font-weight: bold;">➕ Add Days</a>
+                        {% endif %}
+                    </td>
+
+                    <!-- Action / Control -->
+                    <td>
+                        {% if shop.status|lower == 'inactive' %}
+                            <a href="{{ url_for('toggle_shop_status', shop_id=shop.id) }}" style="color: #10b981; font-weight: bold; text-decoration: none;">Activate</a>
+                        {% else %}
+                            <a href="{{ url_for('toggle_shop_status', shop_id=shop.id) }}" style="color: #ef4444; font-weight: bold; text-decoration: none;">Deactive</a>
+                        {% endif %}
+                    </td>
+<!-- টেবিলের কলাম বা যেখানে দেখাতে চান -->
+<td>₹ {{ shop.todays_revenue }}</td>
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+    <!-- আনরিড মেসেজ চেক করার জন্য লাইভ নোটিফিকেশন স্ক্রিপ্ট -->
+    <script>
+        setInterval(function() {
+            fetch('/admin/api/check-notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('unread-badge');
+                    if (badge) {
+                        if (data.unread_count > 0) {
+                            badge.innerText = data.unread_count;
+                            badge.style.display = 'inline-block';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                }).catch(err => console.log('Notification fetch error:', err));
+        }, 5000);8
+    </script>
+</body>
+</html>

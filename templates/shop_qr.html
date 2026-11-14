@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR se Print - {{ shop.shop_name }}</title>
+    <!-- Premium QR Code Library CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #000;
+        }
+        .poster {
+            width: 720px;
+            background: #ffffff;
+            border: 6px solid #1e3a8a;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+        /* Header section with dual printer icons */
+        .header {
+            padding: 15px 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .left-printer-icon {
+            position: absolute;
+            left: 35px;
+        }
+        .right-printer-icon {
+            position: absolute;
+            right: 35px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 56px;
+            color: #1e3a8a;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+        .header h1 .small-se {
+            font-size: 38px;
+            font-weight: bold;
+            display: inline-block;
+            transform: rotate(-10deg);
+            margin: 0 8px;
+        }
+        /* Steps Bar */
+        .steps-bar {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 14px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        /* Middle area */
+        .content {
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .step-icon-box {
+            border: 3px solid #1e3a8a;
+            border-radius: 14px;
+            padding: 15px;
+            width: 150px;
+            background: #f8fafc;
+            font-size: 15px;
+            line-height: 1.4;
+            text-align: center;
+            font-weight: bold;
+        }
+        .step-icon-box h4 {
+            margin: 0 0 8px 0;
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: 900;
+        }
+        .step-icon-box .icon {
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: center;
+        }
+        .main-qr-box {
+            border: 5px solid #1e3a8a;
+            border-radius: 20px;
+            padding: 15px;
+            background: #ffffff;
+            display: inline-block;
+        }
+        .arrow-right {
+            color: #1e3a8a;
+            font-size: 40px;
+            font-weight: bold;
+        }
+        /* Upload & Pay Badge */
+        .upload-pay-area {
+            margin: 25px 0;
+        }
+        .upload-pay-badge {
+            border: 3px solid #1e3a8a;
+            border-radius: 40px;
+            padding: 15px 30px;
+            display: inline-flex;
+            align-items: center;
+            background: #f8fafc;
+            color: #1e3a8a;
+            font-weight: 900;
+            font-size: 18px;
+        }
+        .upload-pay-badge .upload-icon {
+            font-size: 28px;
+            margin-right: 12px;
+            color: #0f172a;
+        }
+        /* AUTOMATIC PRINT Banner */
+        .footer-banner {
+            background: #f59e0b;
+            padding: 16px;
+            color: #000000;
+            font-weight: 900;
+            font-size: 26px;
+            letter-spacing: 1.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .footer-banner .print-icon {
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+        }
+        /* Shop Info */
+        .shop-info-area {
+            margin-bottom: 10px;
+        }
+        .developer-info {
+            font-size: 12px;
+            color: #475569;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        .developer-info span {
+            border: 3px solid #1e3a8a;
+            border-radius: 15px;
+            padding: 5px 20px;
+            color: #1e3a8a;
+            font-weight: 800;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        .shop-info {
+            background: #1e3a8a;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 14px;
+            margin-top: 15px;
+        }
+        .shop-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #93c5fd;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        /* নীল ব্যাকগ্রাউন্ডের উপর স্পষ্ট হট পিংক (Hot Pink) কালার */
+        .shop-info h2 {
+            margin: 8px 0 6px 0;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #FF1493; /* Bright Hot Pink */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        .shop-info h3 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        /* Print Controls */
+        .action-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .btn-print {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-print:hover {
+            background: #1d4ed8;
+        }
+        .back-link {
+            color: #1e3a8a;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Hide buttons during print */
+        @media print {
+            @page { size: A4; margin: 0; }
+            body { background: white; }
+            .action-box { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="poster">
+    <!-- Header with Left and Right Printer Icons -->
+    <div class="header">
+        <div class="left-printer-icon">
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+        </div>
+        
+        <h1>QR <span class="small-se">se</span> PRINT</h1>
+
+        <div class="right-printer-icon">
+            <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#1e3a8a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Steps Bar -->
+    <div class="steps-bar">
+        SCAN &bull; UPLOAD &bull; PAY &bull; PRINT
+    </div>
+
+    <!-- Content (Icons & QR) -->
+    <div class="content">
+        <!-- Step 1 icon -->
+        <div class="step-icon-box">
+            <h4>1. SCAN</h4>
+            <span class="icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+            </span>
+            QR Code<br>
+        </div>
+        
+        <div class="arrow-right">&#10132;</div>
+
+        <!-- Dynamic QR Box -->
+        <div class="main-qr-box">
+            <div id="qrcode"></div>
+        </div>
+
+        <div class="arrow-right">&#10132;</div>
+
+        <!-- Step 3 icon -->
+        <div class="step-icon-box">
+            <h4>3. PRINT</h4>
+            <span class="icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                    <rect x="6" y="14" width="12" height="8"></rect>
+                </svg>
+            </span>
+            Automatic<br>Print 
+        </div>
+    </div>
+
+    <!-- Upload & Pay Badge -->
+    <div class="upload-pay-area">
+        <div class="upload-pay-badge">
+            <span class="upload-icon">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            </span>
+            2. UPLOAD FILE & PAY PAYMENT
+        </div>
+    </div>
+
+    <!-- Automatic Print Banner -->
+    <div class="footer-banner">
+        <span class="print-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+            </svg>
+        </span> ⚡ AUTOMATIC PRINT ⚡
+    </div>
+
+    <!-- Developer Info -->
+    <div class="shop-info-area">
+        <div class="developer-info">
+            Developed by: <br>
+            <span>Kamrul Online Service, Garoimari, Morigaon, Assam, 782104 | Ph: 7907205717 | Email: kamruli077@gmail.com</span>
+        </div>
+    </div>
+    
+    <!-- Shop Info Box -->
+    <div class="shop-info">
+        <p>AVAILABLE ONLY AT</p>
+        <h2>{{ shop.shop_name }}</h2>
+        <h3>Vill/PO: {{ shop.village }}, Dist: {{ shop.district }}, State: {{ shop.state }}, Country: {{ shop.country }} - {{ shop.pincode }}</h3>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-box">
+        <button class="btn-print" onclick="window.print()">🖨️ Print Poster</button>
+        <br>
+        <a href="javascript:history.back()" class="back-link">← Back to Dashboard</a>
+    </div>
+</div>
+
+<script>
+    // Dynamic QR Generator
+    var shopUrl = "http://127.0.0.1:5000/shop/{{ shop_id }}";
+    new QRCode(document.getElementById("qrcode"), {
+        text: shopUrl,
+        width: 220,
+        height: 220,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+</script>
+
+</body>
+</html>

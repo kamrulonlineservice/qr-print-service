@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Counter - Print Queue</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef2f7; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: white; max-width: 400px; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); text-align: center; }
+        h2 { color: #d32f2f; margin-top: 0; }
+        p { color: #555; font-size: 14px; line-height: 1.5; }
+        .btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #0056b3; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="box">
+       <!-- কাস্টমারের ক্যাশ ওয়েটিং পেজ -->
+<div style="text-align: center; padding: 20px;">
+    <h3>Pay at Cash Counter</h3>
+    <p>আপনার প্রিন্ট রিকোয়েস্টটি সফলভাবে দোকানদারের প্রিন্ট কিউ-তে জমা হয়েছে।</p>
+    <p>দয়া করে কাউন্টারে ক্যাশ পেমেন্ট করুন। দোকানদার পেমেন্ট কনফার্ম করে প্রিন্ট চালু করে দেবেন।</p>
+    
+    <!-- ড্যাশবোর্ডের বদলে ইনডেক্স পেজে যাওয়ার বাটন -->
+    <a href="/shop/{{ shop_id }}" style="text-decoration: none;">
+    <button style="background: #2563eb; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 15px;">
+        Print Another File (নতুন ফাইল প্রিন্ট করুন)
+    </button>
+</a>
+</div>
+</body>
+</html>

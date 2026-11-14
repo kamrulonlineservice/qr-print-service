@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1e1e1e; padding: 30px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.5); width: 400px; border: 1px solid #333; text-align: center; }
+        h2 { margin-bottom: 20px; color: #fff; font-size: 22px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .contact-box { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #444; }
+        .contact-box p { margin: 0 0 8px 0; color: #bbb; font-size: 14px; font-weight: bold; }
+        .btn { display: block; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 15px; margin-top: 5px; transition: 0.3s; }
+        .whatsapp-btn { background: #25d366; color: white; }
+        .whatsapp-btn:hover { background: #20ba5a; }
+        .call-btn { background: #0d6efd; color: white; }
+        .call-btn:hover { background: #0b5ed7; }
+        .email-text { color: #6ea8fe; font-size: 16px; font-weight: bold; text-decoration: none; }
+        .back-link { display: block; text-align: center; margin-top: 20px; text-decoration: none; color: #aaa; font-size: 14px; }
+        .back-link:hover { color: #fff; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>📞 Contact Us</h2>
+        
+        <!-- মোবাইল নম্বর ও WhatsApp/Call অপشن -->
+        <div class="contact-box">
+            <p>Mobile Number & WhatsApp:</p>
+            <a href="https://wa.me/{{ shop.mobile }}" target="_blank" class="btn whatsapp-btn">💬 Chat on WhatsApp</a>
+            <a href="tel:{{ shop.mobile }}" class="btn call-btn">📞 Direct Call</a>
+        </div>
+
+        <!-- ইমেইল অপশন -->
+        <div class="contact-box">
+            <p>Email Address:</p>
+            <a href="mailto:{{ shop.email }}" class="email-text">✉️ {{ shop.email }}</a>
+        </div>
+
+        <a href="{{ url_for('shop_dashboard', shop_id=shop.id) }}" class="back-link">← Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shop Registration - Kamrul Online Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: #FFFBF7; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+    .card { background: #ffffff; border: 1px solid #e7e5e4; border-radius: 24px; padding: 2rem; width: 100%; max-width: 480px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
+    h2 { font-family: 'Outfit', sans-serif; font-size: 1.5rem; color: #1c1917; margin-top: 0; text-align: center; margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1rem; }
+    label { font-size: 0.85rem; font-weight: 700; color: #57534e; display: block; margin-bottom: 0.4rem; }
+    input[type="text"], input[type="email"], input[type="password"], select.form-control { width: 100%; padding: 0.7rem; border: 1px solid #d6d3d1; border-radius: 12px; font-size: 0.9rem; box-sizing: border-box; outline: none; background: #fff; }
+    input:focus, select:focus { border-color: #F0245C; }
+    .btn-submit { background: #F0245C; color: white; border: none; padding: 0.8rem; width: 100%; border-radius: 9999px; font-weight: 700; cursor: pointer; margin-top: 1rem; box-shadow: 0 4px 12px rgba(240, 36, 92, 0.25); font-size: 1rem; }
+    .btn-submit:hover { background: #d91b4d; }
+    .link-text { display: block; text-align: center; margin-top: 1.2rem; color: #78716c; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+    .link-text span { color: #F0245C; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>📝 Shop Registration</h2>
+    
+    <form action="/register" method="POST">
+      
+      <div class="form-group">
+        <label>Shop Name:</label>
+        <input type="text" name="shop_name" placeholder="e.g. Kamrul Online Service" required>
+      </div>
+
+      <div class="form-group">
+        <label>Owner Name:</label>
+        <input type="text" name="owner_name" placeholder="e.g. Kamrul Islam" required>
+      </div>
+
+      <div class="form-group">
+        <label>Phone Number:</label>
+        <input type="text" name="phone" placeholder="e.g. 7907205717" required>
+      </div>
+
+      <div class="form-group">
+        <label>Email Address:</label>
+        <input type="email" name="email" placeholder="kamruli077@gmail.com" required>
+      </div>
+      
+      <div class="form-group">
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+      </div>
+
+      <!-- দেশ -->
+      <div class="form-group">
+        <label>Country:</label>
+        <select name="country" class="form-control" style="background-color: #f1f5f9;">
+          <option value="India" selected>India</option>
+        </select>
+      </div>
+
+      <!-- রাজ্য ড্রপডাউন -->
+      <div class="form-group">
+        <label>State:</label>
+        <select name="state" id="stateSelect" class="form-control" required onchange="loadDistricts()">
+          <option value="">-- Select State --</option>
+          <option value="Assam">Assam</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Tripura">Tripura</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Bihar">Bihar</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Maharashtra">Maharashtra</option>
+        </select>
+      </div>
+
+      <!-- জেলা ড্রপডাউন -->
+      <div class="form-group">
+        <label>District:</label>
+        <select name="district" id="districtSelect" class="form-control" required onchange="loadVillages()">
+          <option value="">-- Select State First --</option>
+        </select>
+      </div>
+
+      <!-- ভিলেজ বা পোস্ট অফিস ড্রপডাউন -->
+      <div class="form-group" id="villageGroup">
+        <label>Village / Post Office:</label>
+        <select name="village" id="villageSelect" class="form-control" required onchange="checkVillageOther()">
+          <option value="">-- Select District First --</option>
+        </select>
+      </div>
+
+      <!-- যদি লিস্টে না থাকে তবে নিজে লেখার ইনপুট বক্স -->
+      <div class="form-group" id="otherVillageGroup" style="display: none;">
+        <label>Enter Village / Post Office Name:</label>
+        <input type="text" name="other_village" id="otherVillageInput" placeholder="Type your village/PO name">
+      </div>
+
+      <!-- পিন কোড -->
+      <div class="form-group">
+        <label>PIN Code:</label>
+        <input type="text" name="pincode" id="pincodeInput" maxlength="6" placeholder="e.g. 782104" required>
+      </div>
+
+      <button type="submit" class="btn-submit">Register Shop</button>
+    </form>
+
+    <a href="/login" class="link-text">Already have an account? <span>Login here</span></a>
+  </div>
+
+  <!-- জাভাস্ক্রিপ্ট লজিক -->
+  <script>
+    // রাজ্য অনুযায়ী ডিস্ট্রিক্টের তালিকা
+    const districtData = {
+        "Assam": ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Dima Hasao", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metro", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+        "West Bengal": ["Alipurduar", "Bankura", "Birbhum", "Cooch Behar", "Darjeeling", "Howrah", "Kolkata", "Malda", "Nadia", "Purba Bardhaman", "Purba Medinipur"],
+        "Meghalaya": ["East Khasi Hills", "West Garo Hills", "Ri Bhoi", "Jaintia Hills"],
+        "Arunachal Pradesh": ["Itanagar", "Tawang", "Pasighat", "Papum Pare"],
+        "Tripura": ["West Tripura", "Dhalai", "Gomati"],
+        "Manipur": ["Imphal West", "Imphal East", "Thoubal"],
+        "Nagaland": ["Kohima", "Dimapur", "Mokokchung"],
+        "Mizoram": ["Aizawl", "Lunglei"],
+        "Bihar": ["Patna", "Gaya", "Muzaffarpur", "Bhagalpur"],
+        "Delhi": ["New Delhi", "North Delhi", "South Delhi", "East Delhi"],
+        "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane"]
+    };
+
+    // প্রতিটি ডিস্ট্রিক্টের আন্ডারে ২-৪টি করে প্রধান গ্রাম/পোস্ট অফিস এবং পিনকোড
+    const districtVillageData = {
+        // মরিগাঁও জেলা (আপনার মূল এলাকা প্রাধান্য দিয়ে)
+        "Morigaon": [
+            { name: "Garoimari ", pin: "782104" },
+            { name: "Nagabanda (PO)", pin: "782103" },
+            { name: "Mayong", pin: "782411" },
+            { name: "Morigaon Town", pin: "782105" }
+        ],
+        // নগাঁও জেলা
+        "Nagaon": [
+            { name: "Nagaon Town", pin: "782001" },
+            { name: "Raha", pin: "782103" },
+            { name: "Kampur", pin: "782426" },
+            { name: "Kaliabor", pin: "782137" }
+        ],
+        // কামরূপ জেলা
+        "Kamrup": [
+            { name: "Guwahati Sadar", pin: "781001" },
+            { name: "Rangia", pin: "781354" },
+            { name: "Palasbari", pin: "781128" }
+        ],
+        "Kamrup Metro": [
+            { name: "Dispur", pin: "781006" },
+            { name: "Uzan Bazar", pin: "781001" },
+            { name: "Basistha", pin: "781029" }
+        ],
+        // বরপেটা
+        "Barpeta": [
+            { name: "Barpeta Town", pin: "781301" },
+            { name: "Pathsala", pin: "781325" },
+            { name: "Howly", pin: "781316" }
+        ],
+        // অন্যান্য সমস্ত জেলার জন্য কমন কিছু নমুনা গ্রাম/পোস্ট অফিস (পরে আপনি আপনার ইচ্ছামতো এগুলো এডিট করে বাড়িয়ে নিতে পারবেন)
+        "DEFAULT": [
+            { name: "Town Area / Sadar", pin: "781001" },
+            { name: "Block Office Area", pin: "781002" },
+            { name: "Local Market PO", pin: "781003" }
+        ]
+    };
+
+    function loadDistricts() {
+        const stateSelect = document.getElementById("stateSelect");
+        const districtSelect = document.getElementById("districtSelect");
+        const villageSelect = document.getElementById("villageSelect");
+        
+        const selectedState = stateSelect.value;
+
+        districtSelect.innerHTML = '<option value="">-- Select District --</option>';
+        villageSelect.innerHTML = '<option value="">-- Select District First --</option>';
+
+        let districts = districtData[selectedState] || [];
+        
+        if (districts.length > 0) {
+            districts.forEach(district => {
+                let option = document.createElement("option");
+                option.value = district;
+                option.textContent = district;
+                districtSelect.appendChild(option);
+            });
+        }
+        
+        let otherDist = document.createElement("option");
+        otherDist.value = "Other";
+        otherDist.textContent = "-- Other (Type Manually) --";
+        districtSelect.appendChild(otherDist);
+    }
+
+    function loadVillages() {
+        const districtSelect = document.getElementById("districtSelect");
+        const villageSelect = document.getElementById("villageSelect");
+        const otherGroup = document.getElementById("otherVillageGroup");
+        const pincodeInput = document.getElementById("pincodeInput");
+
+        const selectedDistrict = districtSelect.value;
+
+        villageSelect.innerHTML = '<option value="">-- Select Village / PO --</option>';
+        otherGroup.style.display = "none";
+        pincodeInput.value = "";
+
+        // নির্দিষ্ট জেলা থাকলে তার ডাটা লোড করা, না থাকলে ডিফল্ট ডাটা দেখানো
+        let villages = districtVillageData[selectedDistrict] || districtVillageData["DEFAULT"];
+
+        villages.forEach(item => {
+            let option = document.createElement("option");
+            option.value = item.name;
+            option.textContent = item.name;
+            option.setAttribute("data-pin", item.pin);
+            villageSelect.appendChild(option);
+        });
+
+        // নিজে লেখার জন্য 'Other' অপশন যুক্ত করা
+        let otherOption = document.createElement("option");
+        otherOption.value = "Other";
+        otherOption.textContent = "-- Other Village (Type Manually) --";
+        villageSelect.appendChild(otherOption);
+    }
+
+    function checkVillageOther() {
+        const villageSelect = document.getElementById("villageSelect");
+        const otherGroup = document.getElementById("otherVillageGroup");
+        const otherInput = document.getElementById("otherVillageInput");
+        const pincodeInput = document.getElementById("pincodeInput");
+
+        if (villageSelect.value === "Other") {
+            otherGroup.style.display = "block";
+            otherInput.required = true;
+            pincodeInput.value = ""; // ম্যানুয়াল লেখার সময় পিনকোড খালি থাকবে, ইউজার নিজে বসাবে
+        } else {
+            otherGroup.style.display = "none";
+            otherInput.required = false;
+            
+            // ড্রপডাউন থেকে সিলেক্ট করলে স্বয়ংক্রিয়ভাবে পিনকোড বসে যাবে
+            let selectedOption = villageSelect.options[villageSelect.selectedIndex];
+            let pin = selectedOption.getAttribute("data-pin");
+            if (pin) {
+                pincodeInput.value = pin;
+            }
+        }
+    }
+  </script>
+</body>
+</html>

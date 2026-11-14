@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payment Settings - {{ shop.shop_name }}</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fffaf7;color:#292524;font-family:Arial,sans-serif}.wrap{max-width:850px;margin:28px auto;padding:0 16px}.card{background:#fff;border:1px solid #eee0d9;border-radius:16px;padding:22px;margin-bottom:18px;box-shadow:0 5px 20px #00000008}h1{font-size:25px;margin:0 0 8px;color:#e91e56}h2{font-size:18px;margin:0 0 14px}.muted{color:#78716c;font-size:13px;line-height:1.5}.row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid #f1e9e5}.row:last-child{border:0}.switch{width:22px;height:22px;accent-color:#e91e56}.field{margin:14px 0}.field label{display:block;font-weight:700;font-size:13px;margin-bottom:7px}.field input,.field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;font-size:14px}.btn{display:inline-block;border:0;border-radius:9px;padding:12px 18px;background:#e91e56;color:white;font-weight:700;text-decoration:none;cursor:pointer}.back{background:#f3f4f6;color:#333;margin-left:8px}.notice{padding:12px;border-radius:9px;background:#fff7df;color:#805b00;font-size:13px;line-height:1.5}.success{background:#dcfce7;color:#166534;padding:12px;border-radius:9px;margin:12px 0}@media(max-width:600px){.row{align-items:flex-start}.card{padding:17px}}
+</style></head>
+<body><main class="wrap">
+<div class="card"><h1>💳 Payment Settings</h1><div class="muted">{{ shop.shop_name }} · Shop ID {{ shop_id }}<br>Each shop controls its own payment methods.</div>
+{% if saved %}<div class="success">✓ Payment settings saved successfully.</div>{% endif %}</div>
+<form method="POST">
+<div class="card"><h2>Payment Methods</h2>
+<div class="row"><div><strong>Online Payment</strong><div class="muted">Allow customers to choose online payment.</div></div><input class="switch" type="checkbox" name="online_payment_enabled" {% if shop.online_payment_enabled|default(1) %}checked{% endif %}></div>
+<div class="row"><div><strong>Cash Payment at Counter</strong><div class="muted">Allow customers to pay cash at the shop.</div></div><input class="switch" type="checkbox" name="cash_payment_enabled" {% if shop.cash_payment_enabled|default(1) %}checked{% endif %}></div>
+</div>
+<div class="card"><h2>UPI & Dynamic QR</h2>
+<div class="field"><label>Shop UPI ID</label><input name="upi_id" type="text" value="{{ shop.upi_id or '' }}" placeholder="yourname@okaxis" autocomplete="off" required><div class="muted">আপোনাৰ নিজৰ সক্ৰিয় UPI ID লিখক। Save কৰিলে এই ID দোকানৰ Dynamic QR-ত ব্যৱহাৰ হ’ব।</div></div>
+<div class="field"><label>Merchant / Shop Name on UPI</label><input name="payment_merchant_name" value="{{ shop.payment_merchant_name or shop.shop_name }}" placeholder="Shop name"></div>
+<p class="muted">এই UPI ID-টো Save কৰাৰ পিছত Shop-ৰ Payment QR তৈয়াৰ কৰোঁতে ব্যৱহাৰ হ’ব। উদাহৰণটো কেৱল format বুজাবলৈ; আপোনাৰ নিজৰ UPI ID-টোৱেই ইয়াত দেখা যাব।</p>
+</div>
+<div class="card"><h2>Online Payment Gateway</h2>
+<div class="field"><label>Gateway</label><select name="payment_gateway" id="gateway" onchange="showGatewayFields()"><option value="upi" {% if shop.payment_gateway|default('upi')=='upi' %}selected{% endif %}>UPI QR / UPI App</option><option value="razorpay" {% if shop.payment_gateway=='razorpay' %}selected{% endif %}>Razorpay</option><option value="phonepe" {% if shop.payment_gateway=='phonepe' %}selected{% endif %}>PhonePe Payment Gateway</option></select></div>
+<div id="razorpayFields"><div class="field"><label>Razorpay Key ID</label><input name="razorpay_key_id" value="{{ shop.razorpay_key_id or '' }}" autocomplete="off" placeholder="rzp_live_... "></div><div class="field"><label>Razorpay Key Secret</label><input type="password" name="razorpay_key_secret" value="{{ shop.razorpay_key_secret or '' }}" autocomplete="new-password" placeholder="Enter secret key"></div></div>
+<div id="phonepeFields"><div class="field"><label>PhonePe Merchant ID</label><input name="phonepe_merchant_id" value="{{ shop.phonepe_merchant_id or '' }}" autocomplete="off"></div><div class="field"><label>PhonePe Salt Key</label><input type="password" name="phonepe_salt_key" value="{{ shop.phonepe_salt_key or '' }}" autocomplete="new-password"></div></div>
+<div class="notice">Gateway credentials are saved for configuration, but selecting a gateway here does not activate live collections by itself. Live payment requires merchant onboarding, verified credentials, server-side signature verification and payment-webhook integration. Never share secret keys in chat.</div>
+</div>
+<button class="btn" type="submit">💾 Save Payment Settings</button><a class="btn back" href="{{ url_for('shop_dashboard',shop_id=shop_id) }}">Back to Dashboard</a>
+</form></main>
+<script>function showGatewayFields(){const g=document.getElementById('gateway').value;document.getElementById('razorpayFields').style.display=g==='razorpay'?'block':'none';document.getElementById('phonepeFields').style.display=g==='phonepe'?'block':'none'}showGatewayFields();</script>
+</body></html>

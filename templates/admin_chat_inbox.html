@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Chat Inbox</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121212; color: #e0e0e0; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { width: 600px; background: #1e1e1e; border-radius: 12px; border: 1px solid #333; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+        .header { background: #222; padding: 20px; text-align: center; font-size: 18px; font-weight: bold; color: #fff; border-bottom: 1px solid #333; }
+        .chat-list { display: flex; flex-direction: column; max-height: 500px; overflow-y: auto; }
+        .chat-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #333; text-decoration: none; color: inherit; transition: background 0.2s; }
+        .chat-item:hover { background: #2a2a2a; }
+        .shop-info h4 { margin: 0 0 5px 0; color: #fff; font-size: 15px; }
+        .shop-info p { margin: 0; color: #aaa; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 350px; }
+        .btn-reply { background: #0d6efd; color: white; padding: 6px 14px; border-radius: 6px; font-size: 13px; text-decoration: none; font-weight: bold; }
+        .btn-reply:hover { background: #0b5ed7; }
+        .back-link { display: block; text-align: center; background: #1a1a1a; padding: 12px; text-decoration: none; color: #aaa; font-size: 14px; border-top: 1px solid #333; }
+        .back-link:hover { color: #fff; }
+        .no-chat { text-align: center; padding: 40px; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">📬 Live Support Inbox (Admin)</div>
+        <div class="chat-list">
+            {% if chats %}
+                {% for chat in chats %}
+                    <a href="{{ url_for('admin_chat_detail', shop_id=chat.shop_id) }}" class="chat-item">
+                        <div class="shop-info">
+                            <h4>Shop ID: {{ chat.shop_id }}</h4>
+                            <p><b>{{ chat.sender }}:</b> {{ chat.message }}</p>
+                        </div>
+                        <span class="btn-reply">Open Chat</span>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <div class="no-chat">No messages or chats available yet.</div>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('admin_dashboard') }}" class="back-link">← Back to Admin Dashboard</a>
+    </div>
+</body>
+</html>

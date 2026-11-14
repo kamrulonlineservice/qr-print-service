@@ -1,1 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Payment - {{ shop.shop_name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FFFBF7;
+            color: #1c1917;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .payment-container {
+            background: #ffffff;
+            max-width: 480px;
+            width: 100%;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #e7e5e4;
+        }
+        /* গ্রেডিয়েন্ট হেডার বক্স */
+        .shop-header-box {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 18px;
+            border-radius: 14px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
+        }
+        .shop-header-box h2 { font-size: 20px; margin: 0 0 4px 0; }
+        .shop-header-box .address { font-size: 13px; opacity: 0.9; margin-bottom: 10px; }
+        .rates-badge {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
 
+        /* স্টেপ ইন্ডিকেটর */
+        .steps-bar {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 20px;
+            padding: 0 5px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 10px;
+        }
+        .steps-bar span.active { color: #2563eb; }
+
+        .bill-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .bill-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #334155; }
+        .bill-row.total { font-weight: 700; font-size: 16px; color: #0f172a; border-top: 1px dashed #cbd5e1; padding-top: 8px; margin-top: 8px; }
+        
+        .btn-group { display: flex; flex-direction: column; gap: 12px; }
+        .btn-upi {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            transition: transform 0.2s;
+        }
+        .btn-upi:hover { transform: translateY(-2px); }
+        
+        /* আই হ্যাভ পেড বাটন (শুরুতে আনক্লিকএবল বা ডিজেবল থাকবে) */
+        .btn-paid {
+            background: #94a3b8;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: not-allowed;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            pointer-events: none; /* ক্লিক করা যাবে না */
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        /* যখন পে অনলাইনে ক্লিক করা হবে, তখন এই ক্লাসটি যুক্ত হয়ে সবুজ ও ক্লিকএবল হবে */
+        .btn-paid.active-paid {
+            background: #16a34a;
+            cursor: pointer;
+            pointer-events: auto;
+            opacity: 1;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+        }
+        .btn-paid.active-paid:hover { background: #15803d; }
+
+        .btn-cash {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-cash:hover { background: #e2e8f0; }
+        
+        .qr-section { margin-top: 15px; display: none; text-align: center; }
+        .qr-img { width: 150px; height: 150px; border: 1px solid #ddd; border-radius: 8px; padding: 5px; margin-bottom: 8px; }
+        
+        .alert-box {
+            background: #eff6ff;
+            color: #1e40af;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            border: 1px solid #dbeafe;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="payment-container">
+        
+        <!-- ১. গ্রেডিয়েন্ট হেডার বক্স -->
+        <div class="shop-header-box">
+            <h2>{{ shop.shop_name }}</h2>
+            <div class="address">📍 {{ shop.address }}</div>
+            <div class="rates-badge">
+                <span class="badge">B&W: ₹{{ shop.bw_rate }}</span>
+                <span class="badge">Color: ₹{{ shop.color_rate }}</span>
+            </div>
+        </div>
+
+        <!-- ২. প্রোগ্রেস স্টেপ বার -->
+        <div class="steps-bar">
+            <span>1. Upload ✓</span>
+            <span>2. Edit ✓</span>
+            <span>3. Preview ✓</span>
+            <span class="active">4. Pay</span>
+        </div>
+
+        <!-- নির্দেশনা বক্স -->
+        <div id="alertBox" class="alert-box">
+            ℹ️ প্রথমে উপরের নীল "Pay Online" বাটনটিতে ক্লিক করে পেমেন্ট সম্পন্ন করুন।
+        </div>
+
+        <div class="bill-box">
+            <div class="bill-row"><span>File Name:</span> <strong>{{ filename }}</strong></div>
+            <div class="bill-row"><span>Print Type:</span> <strong style="text-transform: uppercase;">{{ print_type }}</strong></div>
+            <div class="bill-row"><span>Pages & Copies:</span> <strong>{{ page_count }} Pages ({{ copies }} Copies)</strong></div>
+            <div class="bill-row total"><span>Total Amount:</span> <span style="color: #16a34a;">₹{{ total_amount }}</span></div>
+        </div>
+
+        <div class="btn-group">
+            <!-- ৩. পে অনলাইন বাটন (PhonePe / GPay) -->
+            <button type="button" class="btn-upi" id="onlinePayBtn" onclick="beginOnlinePayment()">
+               📱 Pay Online (PhonePe / GPay)
+            </button>
+
+            <form action="/success/{{ job_id }}" method="POST">
+    <button type="submit" id="paidBtn" class="btn-paid" disabled>
+        ✔ I Have Paid & Continue
+    </button>
+</form>
+
+            <!-- ৫. ক্যাশ কাউন্টার পেমেন্ট অপশন -->
+            <form action="/payment/{{ job_id }}" method="POST" style="margin: 0;">
+                <input type="hidden" name="payment_mode" value="cash">
+                <button type="submit" class="btn-cash" style="width: 100%;">💵 Pay Cash at Counter</button>
+            </form>
+        </div>
+        
+        <!-- ৬. সবার নিচে কিউআর কোড দেখার অপশন -->
+        <div style="margin-top: 15px; text-align: center;">
+            <div id="countdownText" style="font-size:13px;color:#b45309;margin-bottom:8px;">Pay Online বা QR বাছনি কৰাৰ পিছত ১৫ ছেকেণ্ড অপেক্ষা কৰিব লাগিব।</div>
+            <button onclick="toggleQr()" style="background: none; border: none; color: #2563eb; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: underline;">
+                Or Show QR Code for Scanning
+            </button>
+            <div id="qrBox" class="qr-section">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=upi%3A%2F%2Fpay%3Fpa%3D{{ shop.upi_id }}%26pn%3D{{ shop.shop_name }}%26am%3D{{ total_amount }}%26cu%3DINR" alt="UPI QR" class="qr-img">
+                <p style="font-size: 12px; color: #64748b; margin: 0;">Scan with any UPI App, then the button above will unlock.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const jobId = {{ job_id|tojson }};
+        const upiUrl = "upi://pay?pa={{ shop.upi_id|urlencode }}&pn={{ shop.shop_name|urlencode }}&am={{ total_amount }}&cu=INR&tn=PrintJob-{{ job_id }}";
+        const paidBtn = document.getElementById('paidBtn');
+        const countdownText = document.getElementById('countdownText');
+        let countdownInterval = null;
+
+        async function chooseOnlinePayment(openUpi) {
+            try {
+                const body = new URLSearchParams({payment_mode: 'online'});
+                const response = await fetch('/payment/' + jobId, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: body.toString()
+                });
+                if (!response.ok) throw new Error('Payment selection failed');
+                const unlockAt = Date.now() + 15000;
+                sessionStorage.setItem('liveqr_paid_unlock_' + jobId, String(unlockAt));
+                runCountdown();
+                if (openUpi) window.location.href = upiUrl;
+            } catch (err) {
+                countdownText.textContent = 'অনলাইন পেমেণ্ট আৰম্ভ নহ’ল। আকৌ চেষ্টা কৰক।';
+            }
+        }
+
+        function beginOnlinePayment() { chooseOnlinePayment(true); }
+
+        function runCountdown() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            const key = 'liveqr_paid_unlock_' + jobId;
+            const tick = () => {
+                const unlockAt = Number(sessionStorage.getItem(key) || 0);
+                const remaining = Math.ceil((unlockAt - Date.now()) / 1000);
+                if (remaining > 0) {
+                    paidBtn.disabled = true;
+                    paidBtn.classList.remove('active-paid');
+                    countdownText.textContent = 'I Have Paid বুটাম ' + remaining + ' ছেকেণ্ড পিছত সক্ৰিয় হ’ব।';
+                } else if (unlockAt) {
+                    paidBtn.disabled = false;
+                    paidBtn.classList.add('active-paid');
+                    countdownText.textContent = 'এতিয়া পেমেণ্ট কৰাৰ পিছত I Have Paid & Continue ক্লিক কৰিব পাৰিব।';
+                    clearInterval(countdownInterval);
+                }
+            };
+            tick();
+            countdownInterval = setInterval(tick, 500);
+        }
+
+        function toggleQr() {
+            const box = document.getElementById('qrBox');
+            const opening = box.style.display !== 'block';
+            box.style.display = opening ? 'block' : 'none';
+            if (opening) chooseOnlinePayment(false);
+        }
+
+        window.addEventListener('pageshow', runCountdown);
+        window.addEventListener('focus', runCountdown);
+        runCountdown();
+    </script>
+</body>
+</html>
