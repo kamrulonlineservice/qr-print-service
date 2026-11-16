@@ -7,3 +7,4 @@ PyMuPDF
 Pillow
 qrcode
 pdf2image
+psycopg[binary]>=3.2,<4
